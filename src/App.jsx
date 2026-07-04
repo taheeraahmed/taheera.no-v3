@@ -1,121 +1,259 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import { aboutMe, contactCard, projects, rootFiles, welcomeLines } from './content'
+import ContactCard from './components/ContactCard'
+import CvDialog from './components/CvDialog'
+import TerminalWindow from './components/terminal/TerminalWindow'
+import { commandNames, CV_FILE_NAME } from './terminal/constants'
+import { getPathSuggestions } from './terminal/autocomplete'
+import { runCommand } from './terminal/commands'
+import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
+import { createInitialHistory, getWelcomeText } from './terminal/formatters'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [content, setContent] = useState(() =>
+    getContentSnapshot({ projects, rootFiles, aboutMe, contactCard, welcomeLines })
+  )
+  const [cwd, setCwd] = useState([])
+  const [input, setInput] = useState('')
+  const terminalTree = buildTerminalTree(content)
+  const welcomeText = getWelcomeText(content)
+  const [history, setHistory] = useState(() => createInitialHistory(content))
+  const [commandHistory, setCommandHistory] = useState([])
+  const [historyIndex, setHistoryIndex] = useState(null)
+  const [draftInput, setDraftInput] = useState('')
+  const [isCvDialogOpen, setIsCvDialogOpen] = useState(false)
+  const [isCardFlipped, setIsCardFlipped] = useState(false)
+  const [isCardExecutable, setIsCardExecutable] = useState(false)
+
+  const historyEndRef = useRef(null)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    historyEndRef.current?.scrollIntoView({ block: 'end' })
+  }, [history])
+
+  useEffect(() => {
+    if (!import.meta.hot) {
+      return
+    }
+
+    const dispose = import.meta.hot.accept('./content', (newModule) => {
+      if (!newModule) {
+        return
+      }
+
+      setContent(getContentSnapshot(newModule))
+    })
+
+    return () => {
+      if (typeof dispose === 'function') {
+        dispose()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    setCwd([])
+    setInput('')
+    setCommandHistory([])
+    setHistoryIndex(null)
+    setDraftInput('')
+    setIsCardFlipped(false)
+    setIsCardExecutable(false)
+    setHistory(createInitialHistory(content))
+  }, [welcomeText])
+
+  const appendEntries = (entries) => {
+    setHistory((prev) => [...prev, ...entries])
+  }
+
+  const handleRunCommand = (rawInput) => {
+    runCommand({
+      rawInput,
+      cwd,
+      terminalTree,
+      welcomeText,
+      isCardExecutable,
+      appendEntries,
+      setCwd,
+      setHistory,
+      setIsCardFlipped,
+      setIsCvDialogOpen,
+      setIsCardExecutable,
+      inputRef,
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const commandLine = input.trim()
+    if (commandLine) {
+      setCommandHistory((prev) => [...prev, commandLine])
+    }
+
+    setHistoryIndex(null)
+    setDraftInput('')
+    handleRunCommand(input)
+    setInput('')
+  }
+
+  const completeCommand = (line) => {
+    const matches = commandNames.filter((name) => name.startsWith(line))
+    if (matches.length === 1) {
+      setInput(`${matches[0]} `)
+      return
+    }
+
+    if (matches.length > 1) {
+      appendEntries([{ type: 'output', text: matches.join('    ') }])
+    }
+  }
+
+  const completePathArgument = (line, command) => {
+    const hasTrailingSpace = /\s$/.test(line)
+    const segments = line.trim().split(/\s+/)
+    const isChmod = command === 'chmod'
+    const pathPart = isChmod ? (hasTrailingSpace ? '' : segments[2] ?? '') : hasTrailingSpace ? '' : segments[1] ?? ''
+    const commandPrefix = isChmod ? 'chmod +x ' : `${command} `
+
+    if (isChmod && segments[1] !== '+x') {
+      return
+    }
+
+    const suggestions = getPathSuggestions(terminalTree, cwd, pathPart, {
+      directoriesOnly: command === 'cd',
+    })
+
+    if (suggestions.length === 1) {
+      setInput(`${commandPrefix}${suggestions[0]}`)
+      return
+    }
+
+    if (suggestions.length > 1) {
+      appendEntries([{ type: 'output', text: suggestions.join('    ') }])
+    }
+  }
+
+  useEffect(() => {
+    if (!isCvDialogOpen && !isCardFlipped) {
+      return
+    }
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        if (isCvDialogOpen) {
+          setIsCvDialogOpen(false)
+          return
+        }
+
+        setIsCardFlipped(false)
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isCardFlipped, isCvDialogOpen])
+
+  const handleInputKeyDown = (event) => {
+    if (event.key === 'ArrowUp') {
+      if (commandHistory.length === 0) {
+        return
+      }
+
+      event.preventDefault()
+
+      if (historyIndex === null) {
+        setDraftInput(input)
+        const nextIndex = commandHistory.length - 1
+        setHistoryIndex(nextIndex)
+        setInput(commandHistory[nextIndex])
+        return
+      }
+
+      const nextIndex = Math.max(historyIndex - 1, 0)
+      setHistoryIndex(nextIndex)
+      setInput(commandHistory[nextIndex])
+      return
+    }
+
+    if (event.key === 'ArrowDown') {
+      if (historyIndex === null) {
+        return
+      }
+
+      event.preventDefault()
+
+      if (historyIndex >= commandHistory.length - 1) {
+        setHistoryIndex(null)
+        setInput(draftInput)
+        return
+      }
+
+      const nextIndex = historyIndex + 1
+      setHistoryIndex(nextIndex)
+      setInput(commandHistory[nextIndex])
+      return
+    }
+
+    if (event.key !== 'Tab') {
+      return
+    }
+
+    event.preventDefault()
+    const line = input
+
+    if (!line.trim()) {
+      return
+    }
+
+    if (!line.includes(' ')) {
+      completeCommand(line.trim())
+      return
+    }
+
+    const [command] = line.trim().split(/\s+/)
+    if (command === 'cd' || command === 'ls' || command === 'cat' || command === 'open' || command === 'chmod') {
+      completePathArgument(line, command)
+    }
+  }
+
+  useEffect(() => {
+    if (inputRef.current) {
+      const end = inputRef.current.value.length
+      inputRef.current.setSelectionRange(end, end)
+    }
+  }, [input])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <main className="portfolio-page">
+      <CvDialog isOpen={isCvDialogOpen} fileName={CV_FILE_NAME} onClose={() => setIsCvDialogOpen(false)} />
 
-      <div className="ticks"></div>
+      <section className={`terminal-stage ${isCardFlipped ? 'is-flipped' : ''}`}>
+        <div className="terminal-flipper">
+          <TerminalWindow
+            history={history}
+            cwd={cwd}
+            input={input}
+            setInput={setInput}
+            historyIndex={historyIndex}
+            setHistoryIndex={setHistoryIndex}
+            handleSubmit={handleSubmit}
+            handleInputKeyDown={handleInputKeyDown}
+            historyEndRef={historyEndRef}
+            inputRef={inputRef}
+            onHintClick={handleRunCommand}
+          />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+          <section className="terminal-face terminal-face-back terminal-card-face" aria-label="Contact card">
+            <div className="terminal-card-screen">
+              <ContactCard card={content.contactCard} />
+            </div>
+          </section>
         </div>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </main>
   )
 }
 

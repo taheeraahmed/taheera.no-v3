@@ -1,0 +1,27 @@
+export const CV_FILE_NAME = 'CV_taheera_en.pdf'
+
+export const commandNames = [
+  'help',
+  'welcome',
+  'ls',
+  'cd',
+  'pwd',
+  'cat',
+  'open',
+  'clear',
+  'chmod',
+  './card.sh',
+]
+
+export const helpText = [
+  'Commands:',
+  '  help              Show available commands',
+  '  welcome           Quick intro about me',
+  '  ls [path]         List files and folders',
+  '  cd <path>         Change directory',
+  '  pwd               Print current path',
+  '  cat <file>        Read project or hobby note',
+  '  open <file>       Open a file in a browser window',
+  '  chmod +x <file>   Make a script executable',
+  '  clear             Clear terminal output',
+].join('\n')

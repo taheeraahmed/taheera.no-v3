@@ -1,0 +1,93 @@
+.cv-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(14, 12, 24, 0.62);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.cv-dialog {
+  width: min(980px, 100%);
+  height: min(86svh, 860px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--window-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px var(--window-shadow);
+  background: #271726;
+}
+
+.cv-dialog-header {
+  min-height: 46px;
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid rgba(231, 145, 204, 0.38);
+  background: #2c1a2c;
+}
+
+.cv-window-controls {
+  position: absolute;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cv-dot {
+  border: none;
+  padding: 0;
+}
+
+.cv-dot.close {
+  cursor: pointer;
+}
+
+.cv-dialog-title {
+  margin: 0;
+  color: rgba(242, 239, 255, 0.84);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.cv-display {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.cv-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #140f24;
+}
+
+.cv-dialog-hint {
+  margin: 0;
+  padding: 0.55rem 1rem 0.7rem;
+  text-align: center;
+  font: 500 0.82rem/1.35 var(--mono);
+  letter-spacing: 0.01em;
+  color: rgba(242, 239, 255, 0.72);
+  border-top: 1px solid rgba(231, 145, 204, 0.2);
+  background: #2c1a2c;
+}
+
+@media (max-width: 700px) {
+  .cv-dialog-backdrop {
+    padding: 0.7rem;
+  }
+
+  .cv-dialog {
+    height: 90svh;
+  }
+}

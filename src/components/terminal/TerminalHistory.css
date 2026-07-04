@@ -1,0 +1,138 @@
+.history {
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  background: transparent;
+}
+
+.line {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.line + .line {
+  margin-top: 0.42rem;
+}
+
+.prompt {
+  color: var(--shell-accent);
+  white-space: nowrap;
+}
+
+.command {
+  color: #ffe9f8;
+}
+
+.command-name {
+  color: #ff7fc6;
+  font-weight: 700;
+  text-shadow: 0 0 16px rgba(255, 120, 193, 0.35);
+}
+
+.command-args {
+  color: #ffd8ef;
+}
+
+.output {
+  color: #f2d6e9;
+}
+
+.terminal-link {
+  color: #ffd1ee;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.terminal-link:hover {
+  color: #ffe9f7;
+}
+
+.terminal-hint-line {
+  margin: 0.5rem 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.46rem;
+}
+
+.terminal-hint-label {
+  color: #f6d9ec;
+  font-weight: 600;
+}
+
+.rich-output {
+  margin-top: 0.62rem;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.62rem;
+  border-radius: 12px;
+}
+
+.rich-output-text {
+  margin: 0;
+  white-space: pre-wrap;
+  color: #ffe6f6;
+  line-height: 1.5;
+}
+
+.rich-output-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 180, 224, 0.42);
+  box-shadow: 0 10px 28px rgba(15, 7, 12, 0.35);
+  object-fit: cover;
+  object-position: center;
+}
+
+.help-output .help-line {
+  display: grid;
+  grid-template-columns: 25ch 1fr;
+  column-gap: 1ch;
+}
+
+.help-output .help-heading {
+  display: block;
+  font-weight: 600;
+}
+
+.help-output .help-command {
+  white-space: pre;
+}
+
+.help-output .help-description {
+  color: #caa8bb;
+}
+
+.error {
+  color: #ff9ea8;
+}
+
+@media (max-width: 700px) {
+  .history {
+    min-height: 0;
+    max-height: none;
+  }
+
+  .rich-output {
+    grid-template-columns: 1fr;
+  }
+
+  .rich-output-image {
+    max-width: 220px;
+  }
+
+  .terminal-hint-line {
+    gap: 0.38rem;
+  }
+}

@@ -24,10 +24,12 @@ function App() {
   const [draftInput, setDraftInput] = useState('')
   const [isCvDialogOpen, setIsCvDialogOpen] = useState(false)
   const [isCardFlipped, setIsCardFlipped] = useState(false)
-  const [isCardExecutable, setIsCardExecutable] = useState(false)
+  const [windowOffset, setWindowOffset] = useState({ x: 0, y: 0 })
+  const [isDraggingWindow, setIsDraggingWindow] = useState(false)
 
   const historyEndRef = useRef(null)
   const inputRef = useRef(null)
+  const dragStateRef = useRef(null)
 
   useEffect(() => {
     historyEndRef.current?.scrollIntoView({ block: 'end' })
@@ -60,7 +62,6 @@ function App() {
     setHistoryIndex(null)
     setDraftInput('')
     setIsCardFlipped(false)
-    setIsCardExecutable(false)
     setHistory(createInitialHistory(content))
   }, [welcomeText])
 
@@ -74,13 +75,11 @@ function App() {
       cwd,
       terminalTree,
       welcomeText,
-      isCardExecutable,
       appendEntries,
       setCwd,
       setHistory,
       setIsCardFlipped,
       setIsCvDialogOpen,
-      setIsCardExecutable,
       inputRef,
     })
   }
@@ -114,13 +113,8 @@ function App() {
   const completePathArgument = (line, command) => {
     const hasTrailingSpace = /\s$/.test(line)
     const segments = line.trim().split(/\s+/)
-    const isChmod = command === 'chmod'
-    const pathPart = isChmod ? (hasTrailingSpace ? '' : segments[2] ?? '') : hasTrailingSpace ? '' : segments[1] ?? ''
-    const commandPrefix = isChmod ? 'chmod +x ' : `${command} `
-
-    if (isChmod && segments[1] !== '+x') {
-      return
-    }
+    const pathPart = hasTrailingSpace ? '' : segments[1] ?? ''
+    const commandPrefix = `${command} `
 
     const suggestions = getPathSuggestions(terminalTree, cwd, pathPart, {
       directoriesOnly: command === 'cd',
@@ -214,7 +208,7 @@ function App() {
     }
 
     const [command] = line.trim().split(/\s+/)
-    if (command === 'cd' || command === 'ls' || command === 'cat' || command === 'open' || command === 'chmod') {
+    if (command === 'cd' || command === 'ls' || command === 'cat' || command === 'open' || command === 'bash') {
       completePathArgument(line, command)
     }
   }
@@ -226,11 +220,61 @@ function App() {
     }
   }, [input])
 
+  useEffect(() => {
+    if (!isDraggingWindow) {
+      return
+    }
+
+    const handlePointerMove = (event) => {
+      const dragState = dragStateRef.current
+      if (!dragState) {
+        return
+      }
+
+      setWindowOffset({
+        x: dragState.originX + event.clientX - dragState.startX,
+        y: dragState.originY + event.clientY - dragState.startY,
+      })
+    }
+
+    const stopDragging = () => {
+      dragStateRef.current = null
+      setIsDraggingWindow(false)
+    }
+
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', stopDragging)
+    window.addEventListener('pointercancel', stopDragging)
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', stopDragging)
+      window.removeEventListener('pointercancel', stopDragging)
+    }
+  }, [isDraggingWindow])
+
+  const handleWindowDragStart = (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) {
+      return
+    }
+
+    dragStateRef.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: windowOffset.x,
+      originY: windowOffset.y,
+    }
+    setIsDraggingWindow(true)
+  }
+
   return (
     <main className="portfolio-page">
       <CvDialog isOpen={isCvDialogOpen} fileName={CV_FILE_NAME} onClose={() => setIsCvDialogOpen(false)} />
 
-      <section className={`terminal-stage ${isCardFlipped ? 'is-flipped' : ''}`}>
+      <section
+        className={`terminal-stage ${isCardFlipped ? 'is-flipped' : ''} ${isDraggingWindow ? 'is-dragging' : ''}`}
+        style={{ transform: `translate(${windowOffset.x}px, ${windowOffset.y}px)` }}
+      >
         <div className="terminal-flipper">
           <TerminalWindow
             history={history}
@@ -244,6 +288,7 @@ function App() {
             historyEndRef={historyEndRef}
             inputRef={inputRef}
             onHintClick={handleRunCommand}
+            onDragStart={handleWindowDragStart}
           />
 
           <section className="terminal-face terminal-face-back terminal-card-face" aria-label="Contact card">

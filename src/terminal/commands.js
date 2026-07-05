@@ -1,5 +1,5 @@
 import { CV_FILE_NAME, helpText } from './constants'
-import { findNode, formatFileName, normalizeCardScriptPath, resolvePath } from './filesystem'
+import { findNode, formatFileName, resolvePath } from './filesystem'
 import { formatPath } from './formatters'
 
 export const runCommand = ({
@@ -7,13 +7,11 @@ export const runCommand = ({
   cwd,
   terminalTree,
   welcomeText,
-  isCardExecutable,
   appendEntries,
   setCwd,
   setHistory,
   setIsCardFlipped,
   setIsCvDialogOpen,
-  setIsCardExecutable,
   inputRef,
 }) => {
   const commandLine = rawInput.trim()
@@ -151,29 +149,21 @@ export const runCommand = ({
     return
   }
 
-  if (command === 'chmod') {
-    if (args[0] !== '+x' || !args[1]) {
-      appendEntries([baseEntry, { type: 'error', text: 'chmod: usage: chmod +x <file>' }])
-      return
-    }
+  if (command === './card.sh' || command === 'bash') {
+    const scriptName = command === 'bash' ? args[0] : './card.sh'
+    const normalizedScriptName = scriptName?.replace(/^[.][/]/, '')
 
-    const target = normalizeCardScriptPath(args[1])
-    if (target !== 'card.sh') {
+    if (normalizedScriptName !== 'card.sh') {
       appendEntries([
         baseEntry,
-        { type: 'error', text: `chmod: cannot access '${args[1]}': No such file or directory` },
+        {
+          type: 'error',
+          text:
+            command === 'bash'
+              ? `bash: ${scriptName}: No such file or directory`
+              : `${command}: command not found`,
+        },
       ])
-      return
-    }
-
-    setIsCardExecutable(true)
-    appendEntries([baseEntry, { type: 'output', text: `mode of '${args[1]}' changed to 755` }])
-    return
-  }
-
-  if (command === './card.sh') {
-    if (!isCardExecutable) {
-      appendEntries([baseEntry, { type: 'error', text: './card.sh: Permission denied.' }])
       return
     }
 

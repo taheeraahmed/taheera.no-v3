@@ -9,7 +9,7 @@ export const projects = {
 
 export const rootFiles = {
   'CV_taheera_en.pdf': 'Open with: open CV_taheera_en.pdf',
-  'card.sh': 'Run: chmod +x card.sh, then ./card.sh',
+  'card.sh': 'Run: ./card.sh or bash card.sh',
 }
 
 export const contactCard = {

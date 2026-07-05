@@ -22,6 +22,15 @@
   background: #2c1a2c;
 }
 
+.terminal-drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.terminal-stage.is-dragging .terminal-drag-handle {
+  cursor: grabbing;
+}
+
 .window-controls {
   position: absolute;
   left: 1rem;

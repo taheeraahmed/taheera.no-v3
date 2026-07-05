@@ -15,6 +15,7 @@ function TerminalWindow({
   historyEndRef,
   inputRef,
   onHintClick,
+  onDragStart,
 }) {
   const focusInput = () => {
     inputRef.current?.focus({ preventScroll: true })
@@ -47,7 +48,7 @@ function TerminalWindow({
       onMouseDown={handleWindowMouseDown}
       onClick={handleWindowClick}
     >
-      <header className="terminal-bar">
+      <header className="terminal-bar terminal-drag-handle" onPointerDown={onDragStart}>
         <div className="window-controls" aria-hidden="true">
           <span className="dot close"></span>
           <span className="dot minimize"></span>

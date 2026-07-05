@@ -22,6 +22,10 @@
   background: #271726;
 }
 
+.cv-dialog.is-dragging {
+  user-select: none;
+}
+
 .cv-dialog-header {
   min-height: 46px;
   padding: 0.65rem 1rem;
@@ -31,6 +35,15 @@
   position: relative;
   border-bottom: 1px solid rgba(231, 145, 204, 0.38);
   background: #2c1a2c;
+}
+
+.cv-drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.cv-dialog.is-dragging .cv-drag-handle {
+  cursor: grabbing;
 }
 
 .cv-window-controls {

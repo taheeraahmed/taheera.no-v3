@@ -9,7 +9,7 @@ export const commandNames = [
   'cat',
   'open',
   'clear',
-  'chmod',
+  'bash',
   './card.sh',
 ]
 
@@ -22,6 +22,6 @@ export const helpText = [
   '  pwd               Print current path',
   '  cat <file>        Read project or hobby note',
   '  open <file>       Open a file in a browser window',
-  '  chmod +x <file>   Make a script executable',
+  '  bash <file>       Run a shell script',
   '  clear             Clear terminal output',
 ].join('\n')

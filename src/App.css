@@ -13,6 +13,10 @@
   perspective: 1800px;
 }
 
+.terminal-stage.is-dragging {
+  user-select: none;
+}
+
 .terminal-flipper {
   position: relative;
   width: 100%;

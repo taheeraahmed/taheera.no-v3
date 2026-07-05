@@ -96,7 +96,7 @@ function TerminalHistory({ history, historyEndRef, onHintClick }) {
 
         if (
           entry.type === 'output' &&
-          entry.text === 'Try: help, ls, cd projects, cd about-me, chmod +x card.sh'
+          entry.text === 'Try: help, ls, cd projects, cd about-me, ./card.sh, bash card.sh'
         ) {
           return (
             <p className="line output terminal-hint-line" key={`${entry.type}-${index}`}>

@@ -48,12 +48,41 @@
   border-left: 1px solid rgba(255, 180, 228, 0.35);
 }
 
-.card-details h2 {
+.card-details h1 {
   margin: 0;
   font-size: 1.3rem;
   line-height: 1.1;
   letter-spacing: 0.01em;
   color: #fff2fb;
+}
+
+.card-name-trigger {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  text-align: left;
+  text-shadow: 0 0 0 transparent;
+  transition: color 160ms ease, text-shadow 160ms ease;
+}
+
+.card-name-trigger:hover,
+.card-name-trigger:focus-visible,
+.card-name-trigger.is-active {
+  color: #ffe5f7;
+  text-shadow: 0 0 14px rgba(255, 148, 211, 0.58);
+}
+
+.card-name-trigger:focus-visible {
+  outline: 2px solid rgba(255, 180, 228, 0.95);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .card-socials {

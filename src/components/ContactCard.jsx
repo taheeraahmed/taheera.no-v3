@@ -50,7 +50,7 @@ const toSocialHref = (link, card) => {
   return toExternalHref(card[link.key])
 }
 
-function ContactCard({ card, ui, onClose }) {
+function ContactCard({ card, ui, onClose, onNameHover, onNameClick, isCatPartyActive }) {
   const cardLabels = ui?.contactCardLabels ?? {
     role: 'Role',
     organization: 'Organization',
@@ -73,7 +73,18 @@ function ContactCard({ card, ui, onClose }) {
 
       <div className="card-details">
         <p className="card-badge">card.sh</p>
-        <h1>{card.name}</h1>
+        <h1>
+          <button
+            type="button"
+            className={`card-name-trigger ${isCatPartyActive ? 'is-active' : ''}`}
+            onMouseEnter={onNameHover}
+            onFocus={onNameHover}
+            onClick={onNameClick}
+            title={isCatPartyActive ? 'Disable cat mode' : 'Enable cat mode'}
+          >
+            {card.name}
+          </button>
+        </h1>
 
         <div className="card-socials" aria-label="Social links">
           {socialLinks.map((link) => {

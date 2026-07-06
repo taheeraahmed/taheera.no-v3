@@ -1,9 +1,35 @@
 .portfolio-page {
+  position: relative;
   width: 100%;
   min-height: 100svh;
   margin: 0;
   display: grid;
   place-items: center;
+  overflow: clip;
+}
+
+.cat-easter-egg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 260ms ease;
+}
+
+.cat-easter-egg.is-active {
+  opacity: 1;
+}
+
+.cat-easter-egg-sprite {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  opacity: 0.98;
+  filter: saturate(1.2) contrast(1.1) drop-shadow(0 6px 8px rgba(15, 7, 14, 0.26));
+  transform: translate(-50%, -50%);
+  animation: cat-party-float var(--cat-duration, 8s) ease-in-out var(--cat-delay, 0s) infinite alternate;
 }
 
 .terminal-stage {
@@ -12,6 +38,18 @@
   height: 650px;
   margin-inline: auto;
   perspective: 1800px;
+  z-index: 30;
+}
+
+@keyframes cat-party-float {
+  0% {
+    transform: translate(-50%, -50%) rotate(calc(var(--cat-rotate, 0deg) * -1));
+  }
+
+  100% {
+    transform: translate(calc(-50% + var(--cat-drift-x, 0px)), calc(-50% + var(--cat-drift-y, 0px)))
+      rotate(var(--cat-rotate, 0deg));
+  }
 }
 
 .terminal-stage.is-dragging {

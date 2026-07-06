@@ -13,6 +13,7 @@ import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
 import { createInitialHistory, getWelcomeText, formatPrompt } from './terminal/formatters'
 import TerminalHistory from './components/terminal/TerminalHistory'
 import { getTerminalStrings } from './terminal/i18n'
+import useCatParty from './hooks/useCatParty'
 
 function App() {
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE)
@@ -41,6 +42,7 @@ function App() {
   } = usePortfolioWindows()
   const { offset: windowOffset, isDragging: isDraggingWindow, handleDragStart: handleWindowDragStart } =
     useDraggableWindow()
+  const { isCatPartyActive, catSprites, activateCatParty, toggleCatParty } = useCatParty()
 
   const historyEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -221,6 +223,22 @@ function App() {
 
   return (
     <main className="portfolio-page">
+      <div className={`cat-easter-egg ${isCatPartyActive ? 'is-active' : ''}`} aria-hidden="true">
+        {isCatPartyActive
+          ? catSprites.map((cat) => (
+              <img
+                key={cat.id}
+                className="cat-easter-egg-sprite"
+                src={cat.src}
+                alt=""
+                style={cat.style}
+                loading="lazy"
+                decoding="async"
+              />
+            ))
+          : null}
+      </div>
+
       <CvDialog
         isOpen={isCvDialogOpen}
         fileName={CV_FILE_NAME}
@@ -276,7 +294,14 @@ function App() {
 
           <section className="terminal-face terminal-face-back terminal-card-face" aria-label={terminalStrings.contactCardAria}>
             <div className="terminal-card-screen">
-              <ContactCard card={content.contactCard} ui={content.ui} onClose={hideCard} />
+              <ContactCard
+                card={content.contactCard}
+                ui={content.ui}
+                onClose={hideCard}
+                onNameHover={activateCatParty}
+                onNameClick={toggleCatParty}
+                isCatPartyActive={isCatPartyActive}
+              />
             </div>
           </section>
         </div>

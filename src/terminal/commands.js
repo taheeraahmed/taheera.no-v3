@@ -10,8 +10,9 @@ export const runCommand = ({
   appendEntries,
   setCwd,
   setHistory,
-  setIsCardFlipped,
-  setIsCvDialogOpen,
+  hideCard,
+  openCvDialog,
+  showCard,
   inputRef,
 }) => {
   const commandLine = rawInput.trim()
@@ -23,7 +24,7 @@ export const runCommand = ({
   const baseEntry = { type: 'command', command: commandLine, cwd }
 
   if (command === 'clear') {
-    setIsCardFlipped(false)
+    hideCard()
     setHistory([])
     return
   }
@@ -144,7 +145,7 @@ export const runCommand = ({
       return
     }
 
-    setIsCvDialogOpen(true)
+    openCvDialog()
     appendEntries([baseEntry, { type: 'output', text: `Opening ${CV_FILE_NAME}...` }])
     return
   }
@@ -168,7 +169,7 @@ export const runCommand = ({
     }
 
     appendEntries([baseEntry])
-    setIsCardFlipped(true)
+    showCard()
     inputRef.current?.blur()
     return
   }

@@ -4,7 +4,9 @@ import { aboutMe, contactCard, rootFiles, welcomeLines } from './content'
 import ContactCard from './components/ContactCard'
 import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
-import { commandNames, CV_FILE_NAME } from './terminal/constants'
+import useDraggableWindow from './hooks/useDraggableWindow'
+import usePortfolioWindows from './hooks/usePortfolioWindows'
+import { commandNames, CV_FILE_NAME, pathCommands } from './terminal/constants'
 import { getPathSuggestions } from './terminal/autocomplete'
 import { runCommand } from './terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
@@ -23,15 +25,22 @@ function App() {
   const [commandHistory, setCommandHistory] = useState([])
   const [historyIndex, setHistoryIndex] = useState(null)
   const [draftInput, setDraftInput] = useState('')
-  const [isCvDialogOpen, setIsCvDialogOpen] = useState(false)
-  const [isCardFlipped, setIsCardFlipped] = useState(false)
-  const [windowOffset, setWindowOffset] = useState({ x: 0, y: 0 })
-  const [isDraggingWindow, setIsDraggingWindow] = useState(false)
-  const [activeWindow, setActiveWindow] = useState('terminal')
+  const {
+    activeWindow,
+    closeCvDialog,
+    hideCard,
+    isCardFlipped,
+    isCvDialogOpen,
+    openCvDialog,
+    setCvActive,
+    setTerminalActive,
+    showCard,
+  } = usePortfolioWindows()
+  const { offset: windowOffset, isDragging: isDraggingWindow, handleDragStart: handleWindowDragStart } =
+    useDraggableWindow()
 
   const historyEndRef = useRef(null)
   const inputRef = useRef(null)
-  const dragStateRef = useRef(null)
 
   useEffect(() => {
     historyEndRef.current?.scrollIntoView({ block: 'end' })
@@ -63,9 +72,9 @@ function App() {
     setCommandHistory([])
     setHistoryIndex(null)
     setDraftInput('')
-    setIsCardFlipped(false)
+    hideCard()
     setHistory(createInitialHistory(content))
-  }, [welcomeText])
+  }, [content, hideCard])
 
   const appendEntries = (entries) => {
     setHistory((prev) => [...prev, ...entries])
@@ -80,8 +89,9 @@ function App() {
       appendEntries,
       setCwd,
       setHistory,
-      setIsCardFlipped,
-      setIsCvDialogOpen,
+      hideCard,
+      openCvDialog,
+      showCard,
       inputRef,
     })
   }
@@ -104,81 +114,6 @@ function App() {
     handleRunCommand(input)
     setInput('')
   }
-
-  const completeCommand = (line) => {
-    const matches = commandNames.filter((name) => name.startsWith(line))
-    if (matches.length === 1) {
-      setInput(`${matches[0]} `)
-      return
-    }
-
-    if (matches.length > 1) {
-      appendEntries([{ type: 'output', text: matches.join('    ') }])
-    }
-  }
-
-  const completePathArgument = (line, command) => {
-    const hasTrailingSpace = /\s$/.test(line)
-    const segments = line.trim().split(/\s+/)
-    const pathPart = hasTrailingSpace ? '' : segments[1] ?? ''
-    const commandPrefix = `${command} `
-
-    const suggestions = getPathSuggestions(terminalTree, cwd, pathPart, {
-      directoriesOnly: command === 'cd',
-    })
-
-    if (suggestions.length === 1) {
-      setInput(`${commandPrefix}${suggestions[0]}`)
-      return
-    }
-
-    if (suggestions.length > 1) {
-      appendEntries([{ type: 'output', text: suggestions.join('    ') }])
-    }
-  }
-
-  useEffect(() => {
-    if (!isCvDialogOpen && !isCardFlipped) {
-      return
-    }
-
-    const onKeyDown = (event) => {
-      if (event.key !== 'Escape') {
-        return
-      }
-
-      if (activeWindow === 'cv' && isCvDialogOpen) {
-        setIsCvDialogOpen(false)
-        setActiveWindow('terminal')
-        return
-      }
-
-      if (isCardFlipped) {
-        setIsCardFlipped(false)
-        if (isCvDialogOpen) {
-          setActiveWindow('cv')
-        }
-        return
-      }
-
-      if (isCvDialogOpen) {
-        setIsCvDialogOpen(false)
-        setActiveWindow('terminal')
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [activeWindow, isCardFlipped, isCvDialogOpen])
-
-  useEffect(() => {
-    if (isCvDialogOpen) {
-      setActiveWindow('cv')
-      return
-    }
-
-    setActiveWindow('terminal')
-  }, [isCvDialogOpen])
 
   const handleInputKeyDown = (event) => {
     if (event.key === 'ArrowUp') {
@@ -238,7 +173,7 @@ function App() {
     }
 
     const [command] = line.trim().split(/\s+/)
-    if (command === 'cd' || command === 'ls' || command === 'cat' || command === 'open' || command === 'bash') {
+    if (pathCommands.includes(command)) {
       completePathArgument(line, command)
     }
   }
@@ -250,39 +185,6 @@ function App() {
     }
   }, [input])
 
-  useEffect(() => {
-    if (!isDraggingWindow) {
-      return
-    }
-
-    const handlePointerMove = (event) => {
-      const dragState = dragStateRef.current
-      if (!dragState) {
-        return
-      }
-
-      setWindowOffset({
-        x: dragState.originX + event.clientX - dragState.startX,
-        y: dragState.originY + event.clientY - dragState.startY,
-      })
-    }
-
-    const stopDragging = () => {
-      dragStateRef.current = null
-      setIsDraggingWindow(false)
-    }
-
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', stopDragging)
-    window.addEventListener('pointercancel', stopDragging)
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove)
-      window.removeEventListener('pointerup', stopDragging)
-      window.removeEventListener('pointercancel', stopDragging)
-    }
-  }, [isDraggingWindow])
-
   const focusInput = () => {
     inputRef.current?.focus({ preventScroll: true })
   }
@@ -292,7 +194,7 @@ function App() {
   }
 
   const handleWindowMouseDown = (event) => {
-    setActiveWindow('terminal')
+    setTerminalActive()
 
     if (isInteractiveTarget(event.target)) {
       return
@@ -302,7 +204,7 @@ function App() {
   }
 
   const handleWindowClick = (event) => {
-    setActiveWindow('terminal')
+    setTerminalActive()
 
     if (isInteractiveTarget(event.target)) {
       return
@@ -311,31 +213,14 @@ function App() {
     focusInput()
   }
 
-  const handleWindowDragStart = (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) {
-      return
-    }
-
-    dragStateRef.current = {
-      startX: event.clientX,
-      startY: event.clientY,
-      originX: windowOffset.x,
-      originY: windowOffset.y,
-    }
-    setIsDraggingWindow(true)
-  }
-
   return (
     <main className="portfolio-page">
       <CvDialog
         isOpen={isCvDialogOpen}
         fileName={CV_FILE_NAME}
-        onClose={() => {
-          setIsCvDialogOpen(false)
-          setActiveWindow('terminal')
-        }}
+        onClose={closeCvDialog}
         isActive={activeWindow === 'cv'}
-        onActivate={() => setActiveWindow('cv')}
+        onActivate={setCvActive}
       />
 
       <section
@@ -383,7 +268,7 @@ function App() {
 
           <section className="terminal-face terminal-face-back terminal-card-face" aria-label="Contact card">
             <div className="terminal-card-screen">
-              <ContactCard card={content.contactCard} onClose={() => setIsCardFlipped(false)} />
+              <ContactCard card={content.contactCard} onClose={hideCard} />
             </div>
           </section>
         </div>

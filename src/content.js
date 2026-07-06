@@ -66,7 +66,6 @@ export const welcomeAsciiArt = `
 ⠙⡷⣄⡀⠀⢀⡤⡺⣿⠀⠀⠀⠀⠀⠈⣇⡇  Hopefully someone sees it <3
 ⠀⠈⠛⠛⠛⠛⠋⠀⠘⣆⠀⠀⠀⠀⠀⣿⠇⠀ Repo: [github.com/taheeraahmed/taheera.no-vol-3](https://github.com/taheeraahmed/taheera.no-vol-3)⠀⠀⠀                                        
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢷⣤⣀⣤⣖⠏⠀⠀
-----------------------------------------------------------------
 `
 
 export const welcomeLines = [

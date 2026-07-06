@@ -1,6 +1,17 @@
 import { formatPrompt, splitCommandParts, splitHelpLineParts } from '../../terminal/formatters'
 import './TerminalHistory.css'
 
+const renderHintEntry = (commands, index, onHintClick) => (
+  <p className="line output terminal-hint-line" key={`hint-${index}`}>
+    <span className="terminal-hint-label">Try:</span>
+    {commands.map((command) => (
+      <button className="hint-pill" key={command} onClick={() => onHintClick(command)}>
+        {command}
+      </button>
+    ))}
+  </p>
+)
+
 const renderTextWithMarkdownLinks = (text) => {
   const nodes = []
   const linkPattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g
@@ -94,19 +105,8 @@ function TerminalHistory({ history, historyEndRef, onHintClick }) {
           )
         }
 
-        if (
-          entry.type === 'output' &&
-          entry.text === 'Try: help, ls, cd about-me, ./card.sh, bash card.sh'
-        ) {
-          return (
-            <p className="line output terminal-hint-line" key={`${entry.type}-${index}`}>
-              <span className="terminal-hint-label">Try:</span>
-              <button className="hint-pill" onClick={() => onHintClick('help')}>help</button>
-              <button className="hint-pill" onClick={() => onHintClick('ls')}>ls</button>
-              <button className="hint-pill" onClick={() => onHintClick('bash card.sh')}>bash card.sh</button>
-              <button className="hint-pill" onClick={() => onHintClick('open CV_taheera_en.pdf')}>open CV_taheera_en.pdf</button>
-            </p>
-          )
+        if (entry.type === 'hint') {
+          return renderHintEntry(entry.commands, index, onHintClick)
         }
 
         return (

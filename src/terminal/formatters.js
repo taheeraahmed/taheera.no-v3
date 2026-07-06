@@ -1,3 +1,5 @@
+import { hintCommands } from './constants'
+
 export const formatPath = (segments) => (segments.length ? `/${segments.join('/')}` : '/')
 
 export const formatPrompt = (segments) => `you@taheera.no:${formatPath(segments)}$`
@@ -53,7 +55,7 @@ export const createInitialHistory = (content) => [
     text: getWelcomeText(content),
   },
   {
-    type: 'output',
-    text: 'Try: help, ls, cd about-me, ./card.sh, bash card.sh',
+    type: 'hint',
+    commands: hintCommands,
   },
 ]

@@ -55,7 +55,9 @@
 }
 
 .terminal-hint-line {
-  margin: 0.5rem 0 1rem;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(246, 217, 236, 0.2);
   display: flex;
   flex-wrap: wrap;
   align-items: center;

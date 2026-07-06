@@ -27,8 +27,15 @@
   touch-action: none;
 }
 
-.terminal-stage.is-dragging .terminal-drag-handle {
+.terminal-stage.is-dragging .terminal-drag-handle,
+.terminal-window.is-dragging .terminal-drag-handle {
   cursor: grabbing;
+}
+
+.terminal-bar button.dot {
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .window-controls {

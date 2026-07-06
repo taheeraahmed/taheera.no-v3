@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
+import TerminalWindow from './terminal/TerminalWindow'
 import './CvDialog.css'
 
-function CvDialog({ isOpen, fileName, onClose }) {
+function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
   const [dialogOffset, setDialogOffset] = useState({ x: 0, y: 0 })
   const [isDraggingDialog, setIsDraggingDialog] = useState(false)
   const dialogRef = useRef(null)
   const dragStateRef = useRef(null)
+
+  const activateDialog = () => {
+    onActivate?.()
+  }
 
   useEffect(() => {
     if (!isOpen) {
@@ -14,24 +19,6 @@ function CvDialog({ isOpen, fileName, onClose }) {
 
     setDialogOffset({ x: 0, y: 0 })
   }, [isOpen])
-
-  useEffect(() => {
-    if (!isOpen) {
-      return undefined
-    }
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, onClose])
 
   useEffect(() => {
     if (!isDraggingDialog) {
@@ -99,36 +86,43 @@ function CvDialog({ isOpen, fileName, onClose }) {
   }
 
   return (
-    <div className="cv-dialog-backdrop" onClick={onClose}>
-      <section
-        className={`cv-dialog ${isDraggingDialog ? 'is-dragging' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="CV preview"
+    <div className="cv-dialog-layer" style={{ zIndex: isActive ? 70 : 20 }}>
+      <TerminalWindow
         ref={dialogRef}
+        title={fileName}
+        onClose={onClose}
+        onDragStart={handleDialogDragStart}
+        onMouseDown={activateDialog}
+        onClick={activateDialog}
+        isDragging={isDraggingDialog}
+        className="cv-dialog"
         style={{ transform: `translate(${dialogOffset.x}px, ${dialogOffset.y}px)` }}
-        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="false"
+        aria-label="CV preview"
       >
-        <header className="cv-dialog-header cv-drag-handle" onPointerDown={handleDialogDragStart}>
-          <div className="cv-window-controls" aria-label="Window controls">
+        <div className="cv-display">
+          {!isActive ? (
             <button
               type="button"
-              className="dot close cv-dot"
-              aria-label="Close CV preview"
-              onClick={onClose}
-            ></button>
-            <span className="dot minimize cv-dot" aria-hidden="true"></span>
-            <span className="dot maximize cv-dot" aria-hidden="true"></span>
-          </div>
-          <p className="cv-dialog-title">{fileName}</p>
-        </header>
-        <div className="cv-display">
-          <iframe className="cv-frame" src={`/${fileName}#toolbar=1&navpanes=0`} title="Taheera CV" />
+              className="cv-activation-overlay"
+              aria-label="Activate CV window"
+              onClick={activateDialog}
+              onMouseDown={activateDialog}
+            />
+          ) : null}
+          <iframe
+            className="cv-frame"
+            src={`/${fileName}#toolbar=1&navpanes=0`}
+            title="Taheera CV"
+            onPointerDown={activateDialog}
+            onFocus={activateDialog}
+          />
         </div>
         <p className="cv-dialog-hint">
           Press <span className="hint-pill hint-pill-key">Escape</span> to close
         </p>
-      </section>
+      </TerminalWindow>
     </div>
   )
 }

@@ -8,7 +8,8 @@ import { commandNames, CV_FILE_NAME } from './terminal/constants'
 import { getPathSuggestions } from './terminal/autocomplete'
 import { runCommand } from './terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
-import { createInitialHistory, getWelcomeText } from './terminal/formatters'
+import { createInitialHistory, getWelcomeText, formatPrompt } from './terminal/formatters'
+import TerminalHistory from './components/terminal/TerminalHistory'
 
 function App() {
   const [content, setContent] = useState(() =>
@@ -26,6 +27,7 @@ function App() {
   const [isCardFlipped, setIsCardFlipped] = useState(false)
   const [windowOffset, setWindowOffset] = useState({ x: 0, y: 0 })
   const [isDraggingWindow, setIsDraggingWindow] = useState(false)
+  const [activeWindow, setActiveWindow] = useState('terminal')
 
   const historyEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -136,19 +138,42 @@ function App() {
     }
 
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        if (isCvDialogOpen) {
-          setIsCvDialogOpen(false)
-          return
-        }
+      if (event.key !== 'Escape') {
+        return
+      }
 
+      if (activeWindow === 'cv' && isCvDialogOpen) {
+        setIsCvDialogOpen(false)
+        setActiveWindow('terminal')
+        return
+      }
+
+      if (isCardFlipped) {
         setIsCardFlipped(false)
+        if (isCvDialogOpen) {
+          setActiveWindow('cv')
+        }
+        return
+      }
+
+      if (isCvDialogOpen) {
+        setIsCvDialogOpen(false)
+        setActiveWindow('terminal')
       }
     }
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [isCardFlipped, isCvDialogOpen])
+  }, [activeWindow, isCardFlipped, isCvDialogOpen])
+
+  useEffect(() => {
+    if (isCvDialogOpen) {
+      setActiveWindow('cv')
+      return
+    }
+
+    setActiveWindow('terminal')
+  }, [isCvDialogOpen])
 
   const handleInputKeyDown = (event) => {
     if (event.key === 'ArrowUp') {
@@ -253,6 +278,34 @@ function App() {
     }
   }, [isDraggingWindow])
 
+  const focusInput = () => {
+    inputRef.current?.focus({ preventScroll: true })
+  }
+
+  const isInteractiveTarget = (target) => {
+    return target instanceof Element && target.closest('button, a, input, label')
+  }
+
+  const handleWindowMouseDown = (event) => {
+    setActiveWindow('terminal')
+
+    if (isInteractiveTarget(event.target)) {
+      return
+    }
+
+    requestAnimationFrame(focusInput)
+  }
+
+  const handleWindowClick = (event) => {
+    setActiveWindow('terminal')
+
+    if (isInteractiveTarget(event.target)) {
+      return
+    }
+
+    focusInput()
+  }
+
   const handleWindowDragStart = (event) => {
     if (event.pointerType === 'mouse' && event.button !== 0) {
       return
@@ -269,27 +322,59 @@ function App() {
 
   return (
     <main className="portfolio-page">
-      <CvDialog isOpen={isCvDialogOpen} fileName={CV_FILE_NAME} onClose={() => setIsCvDialogOpen(false)} />
+      <CvDialog
+        isOpen={isCvDialogOpen}
+        fileName={CV_FILE_NAME}
+        onClose={() => {
+          setIsCvDialogOpen(false)
+          setActiveWindow('terminal')
+        }}
+        isActive={activeWindow === 'cv'}
+        onActivate={() => setActiveWindow('cv')}
+      />
 
       <section
         className={`terminal-stage ${isCardFlipped ? 'is-flipped' : ''} ${isDraggingWindow ? 'is-dragging' : ''}`}
-        style={{ transform: `translate(${windowOffset.x}px, ${windowOffset.y}px)` }}
+        style={{
+          transform: `translate(${windowOffset.x}px, ${windowOffset.y}px)`,
+          zIndex: activeWindow === 'terminal' ? 60 : 30,
+        }}
       >
         <div className="terminal-flipper">
           <TerminalWindow
-            history={history}
-            cwd={cwd}
-            input={input}
-            setInput={setInput}
-            historyIndex={historyIndex}
-            setHistoryIndex={setHistoryIndex}
-            handleSubmit={handleSubmit}
-            handleInputKeyDown={handleInputKeyDown}
-            historyEndRef={historyEndRef}
-            inputRef={inputRef}
-            onHintClick={handleRunCommand}
+            title="simple-but-enhanced-cool-shell"
             onDragStart={handleWindowDragStart}
-          />
+            onMouseDown={handleWindowMouseDown}
+            onClick={handleWindowClick}
+            className="terminal-face terminal-face-front"
+            aria-label="Interactive shell portfolio"
+          >
+            <div className="terminal-screen">
+              <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleRunCommand} />
+
+              <form className="command-form" onSubmit={handleSubmit}>
+                <label htmlFor="command-input" className="prompt">
+                  {formatPrompt(cwd)}
+                </label>
+                <input
+                  id="command-input"
+                  ref={inputRef}
+                  value={input}
+                  onChange={(event) => {
+                    setInput(event.target.value)
+                    if (historyIndex !== null) {
+                      setHistoryIndex(null)
+                    }
+                  }}
+                  onKeyDown={handleInputKeyDown}
+                  autoComplete="off"
+                  spellCheck="false"
+                  placeholder="Type a command..."
+                  aria-label="Shell command input"
+                />
+              </form>
+            </div>
+          </TerminalWindow>
 
           <section className="terminal-face terminal-face-back terminal-card-face" aria-label="Contact card">
             <div className="terminal-card-screen">

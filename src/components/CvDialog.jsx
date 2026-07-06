@@ -119,9 +119,9 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
             onFocus={activateDialog}
           />
         </div>
-        <p className="cv-dialog-hint">
+        <button type="button" className="cv-dialog-hint" onClick={onClose}>
           Press <span className="hint-pill hint-pill-key">Escape</span> to close
-        </p>
+        </button>
       </TerminalWindow>
     </div>
   )

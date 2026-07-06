@@ -383,7 +383,7 @@ function App() {
 
           <section className="terminal-face terminal-face-back terminal-card-face" aria-label="Contact card">
             <div className="terminal-card-screen">
-              <ContactCard card={content.contactCard} />
+              <ContactCard card={content.contactCard} onClose={() => setIsCardFlipped(false)} />
             </div>
           </section>
         </div>

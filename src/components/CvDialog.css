@@ -4,13 +4,13 @@
   z-index: 20;
   display: grid;
   place-items: center;
-  padding: 1.25rem;
+  padding: 1rem;
   pointer-events: none;
 }
 
 .cv-dialog {
-  width: min(980px, 100%);
-  height: min(86svh, 860px);
+  width: min(920px, 100%);
+  height: min(84svh, 800px);
   margin-inline: auto;
   user-select: none;
   pointer-events: auto;
@@ -41,9 +41,9 @@
 
 .cv-dialog-hint {
   margin: 0;
-  padding: 0.55rem 1rem 0.7rem;
+  padding: 0.48rem 0.9rem 0.6rem;
   text-align: center;
-  font: 500 0.82rem/1.35 var(--mono);
+  font: 500 0.78rem/1.35 var(--mono);
   letter-spacing: 0.01em;
   color: rgba(242, 239, 255, 0.72);
   border-top: 1px solid rgba(231, 145, 204, 0.2);
@@ -62,10 +62,10 @@
 
 @media (max-width: 700px) {
   .cv-dialog-layer {
-    padding: 0.7rem;
+    padding: 0.6rem;
   }
 
   .cv-dialog {
-    height: 90svh;
+    height: 88svh;
   }
 }

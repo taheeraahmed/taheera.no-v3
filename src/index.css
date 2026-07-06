@@ -11,7 +11,7 @@
   --sans: 'Space Grotesk', 'Avenir Next', 'Trebuchet MS', sans-serif;
   --mono: 'IBM Plex Mono', 'SF Mono', 'Cascadia Mono', monospace;
 
-  font: 17px/1.5 var(--sans);
+  font: 13px/1.5 var(--sans);
   color: var(--text);
   font-synthesis: none;
   text-rendering: optimizeLegibility;

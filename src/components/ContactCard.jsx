@@ -73,7 +73,7 @@ function ContactCard({ card, ui, onClose }) {
 
       <div className="card-details">
         <p className="card-badge">card.sh</p>
-        <h2>{card.name}</h2>
+        <h1>{card.name}</h1>
 
         <div className="card-socials" aria-label="Social links">
           {socialLinks.map((link) => {
@@ -111,14 +111,14 @@ function ContactCard({ card, ui, onClose }) {
             </div>
           ))}
         </dl>
-
-        <HintActionButton
-          className="card-hint"
-          onClick={onClose}
-          prefix={ui?.escapePrefix ?? 'Press'}
-          suffix={ui?.closeTerminalSuffix ?? 'to return to the terminal.'}
-        />
       </div>
+
+      <HintActionButton
+        className="card-hint"
+        onClick={onClose}
+        prefix={ui?.escapePrefix ?? 'Press'}
+        suffix={ui?.closeTerminalSuffix ?? 'to return to the terminal.'}
+      />
     </article>
   )
 }

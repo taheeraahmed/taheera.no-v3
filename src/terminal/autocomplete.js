@@ -1,3 +1,4 @@
+import { commandNames, pathCommands } from './constants'
 import { findNode, resolvePath } from './filesystem'
 
 const splitParentAndPartial = (rawPath) => {
@@ -44,4 +45,54 @@ export const getPathSuggestions = (terminalTree, cwd, rawPath, options = {}) => 
     const suffix = node.type === 'dir' ? '/' : name.includes('.') ? '' : '.txt'
     return `${parentRaw}${name}${suffix}`
   })
+}
+
+export const completeCommand = (partial) => {
+  const suggestions = commandNames.filter((cmd) => cmd.startsWith(partial))
+
+  if (suggestions.length === 1) {
+    return suggestions[0] + ' '
+  }
+
+  if (suggestions.length > 1) {
+    const commonPrefix = suggestions.reduce((acc, cmd) => {
+      let i = 0
+      while (i < acc.length && i < cmd.length && acc[i] === cmd[i]) {
+        i++
+      }
+      return acc.slice(0, i)
+    })
+    if (commonPrefix.length > partial.length) {
+      return commonPrefix
+    }
+  }
+
+  return null
+}
+
+export const completePathArgument = (line, command, terminalTree, cwd) => {
+  const parts = line.trim().split(/\s+/)
+  const rawPath = parts.slice(1).join(' ')
+  const suggestions = getPathSuggestions(terminalTree, cwd, rawPath, {
+    directoriesOnly: command === 'cd',
+  })
+
+  if (suggestions.length === 1) {
+    return [command, suggestions[0]].join(' ')
+  }
+
+  if (suggestions.length > 1) {
+    const commonPrefix = suggestions.reduce((acc, suggestion) => {
+      let i = 0
+      while (i < acc.length && i < suggestion.length && acc[i] === suggestion[i]) {
+        i++
+      }
+      return acc.slice(0, i)
+    })
+    if (commonPrefix.length > rawPath.length) {
+      return [command, commonPrefix].join(' ')
+    }
+  }
+
+  return null
 }

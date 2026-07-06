@@ -7,7 +7,7 @@ import TerminalWindow from './components/terminal/TerminalWindow'
 import useDraggableWindow from './hooks/useDraggableWindow'
 import usePortfolioWindows from './hooks/usePortfolioWindows'
 import { commandNames, CV_FILE_NAME, pathCommands } from './terminal/constants'
-import { getPathSuggestions } from './terminal/autocomplete'
+import { getPathSuggestions, completeCommand, completePathArgument } from './terminal/autocomplete'
 import { runCommand } from './terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
 import { createInitialHistory, getWelcomeText, formatPrompt } from './terminal/formatters'
@@ -168,13 +168,19 @@ function App() {
     }
 
     if (!line.includes(' ')) {
-      completeCommand(line.trim())
+      const completed = completeCommand(line.trim())
+      if (completed) {
+        setInput(completed)
+      }
       return
     }
 
     const [command] = line.trim().split(/\s+/)
     if (pathCommands.includes(command)) {
-      completePathArgument(line, command)
+      const completed = completePathArgument(line, command, terminalTree, cwd)
+      if (completed) {
+        setInput(completed)
+      }
     }
   }
 

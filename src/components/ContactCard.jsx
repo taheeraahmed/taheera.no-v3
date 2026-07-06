@@ -49,7 +49,7 @@ const toSocialHref = (link, card) => {
   return toExternalHref(card[link.key])
 }
 
-function ContactCard({ card }) {
+function ContactCard({ card, onClose }) {
   return (
     <article className="terminal-contact-card" aria-label="Contact card">
       <div className="card-photo-slot">
@@ -97,9 +97,9 @@ function ContactCard({ card }) {
           ))}
         </dl>
 
-        <p className="card-hint">
+        <button type="button" className="card-hint" onClick={onClose}>
           Press <span className="hint-pill hint-pill-key">Escape</span> to return to the terminal.
-        </p>
+        </button>
       </div>
     </article>
   )

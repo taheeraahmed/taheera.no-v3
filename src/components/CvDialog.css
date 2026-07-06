@@ -48,6 +48,16 @@
   color: rgba(242, 239, 255, 0.72);
   border-top: 1px solid rgba(231, 145, 204, 0.2);
   background: #2c1a2c;
+  border-inline: none;
+  border-bottom: none;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cv-dialog-hint:hover {
+  background: #3a2238;
+  color: rgba(242, 239, 255, 0.95);
 }
 
 @media (max-width: 700px) {

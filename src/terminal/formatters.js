@@ -54,6 +54,6 @@ export const createInitialHistory = (content) => [
   },
   {
     type: 'output',
-    text: 'Try: help, ls, cd projects, cd about-me, ./card.sh, bash card.sh',
+    text: 'Try: help, ls, cd about-me, ./card.sh, bash card.sh',
   },
 ]

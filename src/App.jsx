@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { aboutMe, contactCard, projects, rootFiles, welcomeLines } from './content'
+import { aboutMe, contactCard, rootFiles, welcomeLines } from './content'
 import ContactCard from './components/ContactCard'
 import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
@@ -13,7 +13,7 @@ import TerminalHistory from './components/terminal/TerminalHistory'
 
 function App() {
   const [content, setContent] = useState(() =>
-    getContentSnapshot({ projects, rootFiles, aboutMe, contactCard, welcomeLines })
+    getContentSnapshot({ rootFiles, aboutMe, contactCard, welcomeLines })
   )
   const [cwd, setCwd] = useState([])
   const [input, setInput] = useState('')
@@ -84,6 +84,11 @@ function App() {
       setIsCvDialogOpen,
       inputRef,
     })
+  }
+
+  const handleHintClick = (command) => {
+    setInput(command)
+    inputRef.current?.focus()
   }
 
   const handleSubmit = (event) => {
@@ -350,7 +355,7 @@ function App() {
             aria-label="Interactive shell portfolio"
           >
             <div className="terminal-screen">
-              <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleRunCommand} />
+              <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick} />
 
               <form className="command-form" onSubmit={handleSubmit}>
                 <label htmlFor="command-input" className="prompt">

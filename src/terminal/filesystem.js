@@ -19,7 +19,6 @@ const makeFile = (value) => {
 }
 
 export const getContentSnapshot = (moduleContent) => ({
-  projects: moduleContent.projects,
   rootFiles: {
     [CV_FILE_NAME]: `Open with: open ${CV_FILE_NAME}`,
     ...(moduleContent.rootFiles ?? {}),
@@ -35,7 +34,6 @@ const objectToFiles = (entries) =>
 export const buildTerminalTree = (content) =>
   makeDirectory({
     ...objectToFiles(content.rootFiles),
-    projects: makeDirectory(objectToFiles(content.projects)),
     'about-me': makeDirectory(objectToFiles(content.aboutMe)),
   })
 

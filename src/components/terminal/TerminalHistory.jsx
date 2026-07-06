@@ -96,13 +96,15 @@ function TerminalHistory({ history, historyEndRef, onHintClick }) {
 
         if (
           entry.type === 'output' &&
-          entry.text === 'Try: help, ls, cd projects, cd about-me, ./card.sh, bash card.sh'
+          entry.text === 'Try: help, ls, cd about-me, ./card.sh, bash card.sh'
         ) {
           return (
             <p className="line output terminal-hint-line" key={`${entry.type}-${index}`}>
               <span className="terminal-hint-label">Try:</span>
               <button className="hint-pill" onClick={() => onHintClick('help')}>help</button>
               <button className="hint-pill" onClick={() => onHintClick('ls')}>ls</button>
+              <button className="hint-pill" onClick={() => onHintClick('bash card.sh')}>bash card.sh</button>
+              <button className="hint-pill" onClick={() => onHintClick('open CV_taheera_en.pdf')}>open CV_taheera_en.pdf</button>
             </p>
           )
         }

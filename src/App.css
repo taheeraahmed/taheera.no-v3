@@ -93,6 +93,11 @@
   border: none;
 }
 
+.mobile-contact-only {
+  width: min(960px, 100%);
+  min-height: 100svh;
+}
+
 .terminal-stage.is-flipped .terminal-face-front {
   pointer-events: none;
 }

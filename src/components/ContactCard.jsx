@@ -50,7 +50,7 @@ const toSocialHref = (link, card) => {
   return toExternalHref(card[link.key])
 }
 
-function ContactCard({ card, ui, onClose, onNameHover, onNameClick, isCatPartyActive }) {
+function ContactCard({ card, ui, onClose, onNameHover, onNameClick, isCatPartyActive, isPhoneView = false }) {
   const cardLabels = ui?.contactCardLabels ?? {
     role: 'Role',
     organization: 'Organization',
@@ -124,12 +124,16 @@ function ContactCard({ card, ui, onClose, onNameHover, onNameClick, isCatPartyAc
         </dl>
       </div>
 
-      <HintActionButton
-        className="card-hint"
-        onClick={onClose}
-        prefix={ui?.escapePrefix ?? 'Press'}
-        suffix={ui?.closeTerminalSuffix ?? 'to return to the terminal.'}
-      />
+      {isPhoneView ? (
+        <p className="card-hint card-hint-static">This page is way cooler from a computer ;);)</p>
+      ) : (
+        <HintActionButton
+          className="card-hint"
+          onClick={onClose}
+          prefix={ui?.escapePrefix ?? 'Press'}
+          suffix={ui?.closeTerminalSuffix ?? 'to return to the terminal.'}
+        />
+      )}
     </article>
   )
 }

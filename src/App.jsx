@@ -16,6 +16,13 @@ import { getTerminalStrings } from './terminal/i18n'
 import useCatParty from './hooks/useCatParty'
 
 function App() {
+  const [isPhoneView, setIsPhoneView] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    return window.matchMedia('(max-width: 700px)').matches
+  })
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE)
   const [content, setContent] = useState(() =>
     getContentSnapshot(getLocalizedContent(DEFAULT_LANGUAGE))
@@ -193,6 +200,24 @@ function App() {
     }
   }, [input])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const mediaQuery = window.matchMedia('(max-width: 700px)')
+    const handleMediaChange = (event) => {
+      setIsPhoneView(event.matches)
+    }
+
+    setIsPhoneView(mediaQuery.matches)
+    mediaQuery.addEventListener('change', handleMediaChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange)
+    }
+  }, [])
+
   const focusInput = () => {
     inputRef.current?.focus({ preventScroll: true })
   }
@@ -219,6 +244,42 @@ function App() {
     }
 
     focusInput()
+  }
+
+  if (isPhoneView) {
+    return (
+      <main className="portfolio-page">
+        <div className={`cat-easter-egg ${isCatPartyActive ? 'is-active' : ''}`} aria-hidden="true">
+          {isCatPartyActive
+            ? catSprites.map((cat) => (
+                <img
+                  key={cat.id}
+                  className="cat-easter-egg-sprite"
+                  src={cat.src}
+                  alt=""
+                  style={cat.style}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ))
+            : null}
+        </div>
+
+        <section className="terminal-card-face mobile-contact-only" aria-label={terminalStrings.contactCardAria}>
+          <div className="terminal-card-screen">
+            <ContactCard
+              card={content.contactCard}
+              ui={content.ui}
+              onClose={() => {}}
+              onNameHover={activateCatParty}
+              onNameClick={toggleCatParty}
+              isCatPartyActive={isCatPartyActive}
+              isPhoneView={isPhoneView}
+            />
+          </div>
+        </section>
+      </main>
+    )
   }
 
   return (

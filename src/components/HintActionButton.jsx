@@ -1,7 +1,7 @@
-function HintActionButton({ className, onClick, suffix }) {
+function HintActionButton({ className, onClick, suffix, prefix = 'Press' }) {
   return (
     <button type="button" className={className} onClick={onClick}>
-      Press <span className="hint-pill hint-pill-key">Escape</span> {suffix}
+      {prefix} <span className="hint-pill hint-pill-key">Escape</span> {suffix}
     </button>
   )
 }

@@ -1,27 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
-import { aboutMe, contactCard, rootFiles, welcomeLines } from './content'
+import { DEFAULT_LANGUAGE, getLocalizedContent } from './content'
 import ContactCard from './components/ContactCard'
 import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
 import useDraggableWindow from './hooks/useDraggableWindow'
 import usePortfolioWindows from './hooks/usePortfolioWindows'
-import { commandNames, CV_FILE_NAME, pathCommands } from './terminal/constants'
-import { getPathSuggestions, completeCommand, completePathArgument } from './terminal/autocomplete'
+import { CV_FILE_NAME, pathCommands } from './terminal/constants'
+import { completeCommand, completePathArgument } from './terminal/autocomplete'
 import { runCommand } from './terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
 import { createInitialHistory, getWelcomeText, formatPrompt } from './terminal/formatters'
 import TerminalHistory from './components/terminal/TerminalHistory'
+import { getTerminalStrings } from './terminal/i18n'
 
 function App() {
+  const [language, setLanguage] = useState(DEFAULT_LANGUAGE)
   const [content, setContent] = useState(() =>
-    getContentSnapshot({ rootFiles, aboutMe, contactCard, welcomeLines })
+    getContentSnapshot(getLocalizedContent(DEFAULT_LANGUAGE))
   )
+  const terminalStrings = useMemo(() => getTerminalStrings(language), [language])
   const [cwd, setCwd] = useState([])
   const [input, setInput] = useState('')
   const terminalTree = buildTerminalTree(content)
   const welcomeText = getWelcomeText(content)
-  const [history, setHistory] = useState(() => createInitialHistory(content))
+  const [history, setHistory] = useState(() => createInitialHistory(content, terminalStrings))
   const [commandHistory, setCommandHistory] = useState([])
   const [historyIndex, setHistoryIndex] = useState(null)
   const [draftInput, setDraftInput] = useState('')
@@ -47,6 +50,10 @@ function App() {
   }, [history])
 
   useEffect(() => {
+    setContent(getContentSnapshot(getLocalizedContent(language)))
+  }, [language])
+
+  useEffect(() => {
     if (!import.meta.hot) {
       return
     }
@@ -56,7 +63,7 @@ function App() {
         return
       }
 
-      setContent(getContentSnapshot(newModule))
+      setContent(getContentSnapshot(newModule.getLocalizedContent(language)))
     })
 
     return () => {
@@ -64,17 +71,7 @@ function App() {
         dispose()
       }
     }
-  }, [])
-
-  useEffect(() => {
-    setCwd([])
-    setInput('')
-    setCommandHistory([])
-    setHistoryIndex(null)
-    setDraftInput('')
-    hideCard()
-    setHistory(createInitialHistory(content))
-  }, [content, hideCard])
+  }, [language])
 
   const appendEntries = (entries) => {
     setHistory((prev) => [...prev, ...entries])
@@ -83,11 +80,14 @@ function App() {
   const handleRunCommand = (rawInput) => {
     runCommand({
       rawInput,
+      language,
       cwd,
       terminalTree,
+      terminalStrings,
       welcomeText,
       appendEntries,
       setCwd,
+      setLanguage,
       setHistory,
       hideCard,
       openCvDialog,
@@ -227,6 +227,7 @@ function App() {
         onClose={closeCvDialog}
         isActive={activeWindow === 'cv'}
         onActivate={setCvActive}
+        ui={content.ui}
       />
 
       <section
@@ -238,12 +239,13 @@ function App() {
       >
         <div className="terminal-flipper">
           <TerminalWindow
-            title="simple-but-enhanced-cool-shell"
+            title={terminalStrings.windowTitle}
             onDragStart={handleWindowDragStart}
             onMouseDown={handleWindowMouseDown}
             onClick={handleWindowClick}
             className="terminal-face terminal-face-front"
-            aria-label="Interactive shell portfolio"
+            aria-label={terminalStrings.terminalAria}
+            closeLabel={content.ui?.closeButtonAriaLabel ?? 'Close'}
           >
             <div className="terminal-screen">
               <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick} />
@@ -265,16 +267,16 @@ function App() {
                   onKeyDown={handleInputKeyDown}
                   autoComplete="off"
                   spellCheck="false"
-                  placeholder="Type a command..."
-                  aria-label="Shell command input"
+                  placeholder={terminalStrings.inputPlaceholder}
+                  aria-label={terminalStrings.shellInputAria}
                 />
               </form>
             </div>
           </TerminalWindow>
 
-          <section className="terminal-face terminal-face-back terminal-card-face" aria-label="Contact card">
+          <section className="terminal-face terminal-face-back terminal-card-face" aria-label={terminalStrings.contactCardAria}>
             <div className="terminal-card-screen">
-              <ContactCard card={content.contactCard} onClose={hideCard} />
+              <ContactCard card={content.contactCard} ui={content.ui} onClose={hideCard} />
             </div>
           </section>
         </div>

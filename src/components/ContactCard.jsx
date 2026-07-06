@@ -4,11 +4,11 @@ import HintActionButton from './HintActionButton'
 import './ContactCard.css'
 
 const fieldRows = [
-  { label: 'Role', key: 'title' },
-  { label: 'Organization', key: 'organization' },
-  { label: 'Website', key: 'website', link: true },
-  { label: 'Location', key: 'location' },
-  { label: 'Email', key: 'email' },
+  { labelKey: 'role', key: 'title' },
+  { labelKey: 'organization', key: 'organization' },
+  { labelKey: 'website', key: 'website', link: true },
+  { labelKey: 'location', key: 'location' },
+  { labelKey: 'email', key: 'email' },
 ]
 
 const socialLinks = [
@@ -16,26 +16,26 @@ const socialLinks = [
     label: 'LinkedIn',
     key: 'linkedin',
     icon: LinkedIn,
-    title: 'LinkedIn profile',
+    titleKey: 'linkedin',
   },
   {
     label: 'GitHub',
     key: 'github',
     icon: GitHub,
-    title: 'GitHub profile',
+    titleKey: 'github',
   },
   {
     label: 'Email',
     key: 'email',
     icon: Email,
-    title: 'Send an email',
+    titleKey: 'email',
     isMailto: true,
   },
   {
     label: 'TikTok',
     key: 'tiktok',
     icon: FaTiktok,
-    title: 'TikTok profile',
+    titleKey: 'tiktok',
   },
 ]
 
@@ -50,9 +50,23 @@ const toSocialHref = (link, card) => {
   return toExternalHref(card[link.key])
 }
 
-function ContactCard({ card, onClose }) {
+function ContactCard({ card, ui, onClose }) {
+  const cardLabels = ui?.contactCardLabels ?? {
+    role: 'Role',
+    organization: 'Organization',
+    website: 'Website',
+    location: 'Location',
+    email: 'Email',
+  }
+  const socialTitles = ui?.socialTitles ?? {
+    linkedin: 'LinkedIn profile',
+    github: 'GitHub profile',
+    email: 'Send an email',
+    tiktok: 'TikTok profile',
+  }
+
   return (
-    <article className="terminal-contact-card" aria-label="Contact card">
+    <article className="terminal-contact-card" aria-label={ui?.contactCardAriaLabel ?? 'Contact card'}>
       <div className="card-photo-slot">
         <img className="card-photo" src="/me.png" alt={card.imageAlt} />
       </div>
@@ -73,7 +87,7 @@ function ContactCard({ card, onClose }) {
                 target={link.isMailto ? undefined : '_blank'}
                 rel={link.isMailto ? undefined : 'noreferrer'}
                 aria-label={link.label}
-                title={link.title}
+                title={socialTitles[link.titleKey]}
               >
                 {Icon ? <Icon className="card-social-icon" aria-hidden="true" focusable="false" /> : null}
               </a>
@@ -84,7 +98,7 @@ function ContactCard({ card, onClose }) {
         <dl>
           {fieldRows.map((row) => (
             <div className="card-row" key={row.key}>
-              <dt>{row.label}</dt>
+              <dt>{cardLabels[row.labelKey]}</dt>
               <dd>
                 {row.link ? (
                   <a className="card-link" href={toExternalHref(card[row.key])} target="_blank" rel="noreferrer">
@@ -98,7 +112,12 @@ function ContactCard({ card, onClose }) {
           ))}
         </dl>
 
-        <HintActionButton className="card-hint" onClick={onClose} suffix="to return to the terminal." />
+        <HintActionButton
+          className="card-hint"
+          onClick={onClose}
+          prefix={ui?.escapePrefix ?? 'Press'}
+          suffix={ui?.closeTerminalSuffix ?? 'to return to the terminal.'}
+        />
       </div>
     </article>
   )

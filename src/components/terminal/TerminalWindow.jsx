@@ -3,7 +3,19 @@ import './TerminalShared.css'
 import './TerminalWindow.css'
 
 const TerminalWindow = forwardRef(function TerminalWindow(
-  { title, onClose, onDragStart, isDragging, children, className, style, onMouseDown, onClick, ...rest },
+  {
+    title,
+    onClose,
+    closeLabel = 'Close',
+    onDragStart,
+    isDragging,
+    children,
+    className,
+    style,
+    onMouseDown,
+    onClick,
+    ...rest
+  },
   ref
 ) {
   return (
@@ -18,7 +30,7 @@ const TerminalWindow = forwardRef(function TerminalWindow(
       <header className="terminal-bar terminal-drag-handle" onPointerDown={onDragStart}>
         <div className="window-controls" aria-hidden="true">
           {onClose ? (
-            <button type="button" className="dot close" aria-label="Close" onClick={onClose} />
+            <button type="button" className="dot close" aria-label={closeLabel} onClick={onClose} />
           ) : (
             <span className="dot close"></span>
           )}

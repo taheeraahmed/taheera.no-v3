@@ -13,6 +13,10 @@ export const commandNames = [
   './card.sh',
 ]
 
+export const pathCommands = ['cd', 'ls', 'cat', 'open', 'bash']
+
+export const hintCommands = ['help', 'ls', 'bash card.sh', `open ${CV_FILE_NAME}`]
+
 export const helpText = [
   'Commands:',
   '  help              Show available commands',

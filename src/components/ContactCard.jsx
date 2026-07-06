@@ -1,5 +1,6 @@
 import { Email, GitHub, LinkedIn } from '@mui/icons-material'
 import { FaTiktok } from 'react-icons/fa'
+import HintActionButton from './HintActionButton'
 import './ContactCard.css'
 
 const fieldRows = [
@@ -97,9 +98,7 @@ function ContactCard({ card, onClose }) {
           ))}
         </dl>
 
-        <button type="button" className="card-hint" onClick={onClose}>
-          Press <span className="hint-pill hint-pill-key">Escape</span> to return to the terminal.
-        </button>
+        <HintActionButton className="card-hint" onClick={onClose} suffix="to return to the terminal." />
       </div>
     </article>
   )

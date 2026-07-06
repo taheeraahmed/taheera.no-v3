@@ -1,12 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import HintActionButton from './HintActionButton'
 import TerminalWindow from './terminal/TerminalWindow'
+import useDraggableWindow from '../hooks/useDraggableWindow'
 import './CvDialog.css'
 
 function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
-  const [dialogOffset, setDialogOffset] = useState({ x: 0, y: 0 })
-  const [isDraggingDialog, setIsDraggingDialog] = useState(false)
   const dialogRef = useRef(null)
-  const dragStateRef = useRef(null)
+  const { offset, isDragging, handleDragStart, resetOffset } = useDraggableWindow({
+    getBounds: () => {
+      const dialogRect = dialogRef.current?.getBoundingClientRect()
+      if (!dialogRect) {
+        return {}
+      }
+
+      const margin = 12
+      return {
+        minX: offset.x + (margin - dialogRect.left),
+        maxX: offset.x + (window.innerWidth - margin - dialogRect.right),
+        minY: offset.y + (margin - dialogRect.top),
+        maxY: offset.y + (window.innerHeight - margin - dialogRect.bottom),
+      }
+    },
+  })
 
   const activateDialog = () => {
     onActivate?.()
@@ -17,69 +32,8 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
       return
     }
 
-    setDialogOffset({ x: 0, y: 0 })
-  }, [isOpen])
-
-  useEffect(() => {
-    if (!isDraggingDialog) {
-      return
-    }
-
-    const handlePointerMove = (event) => {
-      const dragState = dragStateRef.current
-      if (!dragState) {
-        return
-      }
-
-      const nextX = dragState.originX + event.clientX - dragState.startX
-      const nextY = dragState.originY + event.clientY - dragState.startY
-
-      setDialogOffset({
-        x: Math.min(Math.max(nextX, dragState.minX), dragState.maxX),
-        y: Math.min(Math.max(nextY, dragState.minY), dragState.maxY),
-      })
-    }
-
-    const stopDragging = () => {
-      dragStateRef.current = null
-      setIsDraggingDialog(false)
-    }
-
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', stopDragging)
-    window.addEventListener('pointercancel', stopDragging)
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove)
-      window.removeEventListener('pointerup', stopDragging)
-      window.removeEventListener('pointercancel', stopDragging)
-    }
-  }, [isDraggingDialog])
-
-  const handleDialogDragStart = (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) {
-      return
-    }
-
-    const dialogRect = dialogRef.current?.getBoundingClientRect()
-    if (!dialogRect) {
-      return
-    }
-
-    const margin = 12
-    dragStateRef.current = {
-      startX: event.clientX,
-      startY: event.clientY,
-      originX: dialogOffset.x,
-      originY: dialogOffset.y,
-      minX: dialogOffset.x + (margin - dialogRect.left),
-      maxX: dialogOffset.x + (window.innerWidth - margin - dialogRect.right),
-      minY: dialogOffset.y + (margin - dialogRect.top),
-      maxY: dialogOffset.y + (window.innerHeight - margin - dialogRect.bottom),
-    }
-
-    setIsDraggingDialog(true)
-  }
+    resetOffset()
+  }, [isOpen, resetOffset])
 
   if (!isOpen) {
     return null
@@ -91,12 +45,12 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
         ref={dialogRef}
         title={fileName}
         onClose={onClose}
-        onDragStart={handleDialogDragStart}
+        onDragStart={handleDragStart}
         onMouseDown={activateDialog}
         onClick={activateDialog}
-        isDragging={isDraggingDialog}
+        isDragging={isDragging}
         className="cv-dialog"
-        style={{ transform: `translate(${dialogOffset.x}px, ${dialogOffset.y}px)` }}
+        style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
         role="dialog"
         aria-modal="false"
         aria-label="CV preview"
@@ -119,9 +73,7 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
             onFocus={activateDialog}
           />
         </div>
-        <button type="button" className="cv-dialog-hint" onClick={onClose}>
-          Press <span className="hint-pill hint-pill-key">Escape</span> to close
-        </button>
+        <HintActionButton className="cv-dialog-hint" onClick={onClose} suffix="to close" />
       </TerminalWindow>
     </div>
   )

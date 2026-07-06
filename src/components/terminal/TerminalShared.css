@@ -49,7 +49,7 @@
 .hint-pill {
   display: inline-flex;
   align-items: center;
-  border-radius: 8px;
+  border-radius: 5px;
   border: 1px solid rgba(255, 175, 223, 0.66);
   color: #fff6fc;
   padding: 0.1rem 0.38rem;
@@ -66,6 +66,23 @@
 .card-hint .hint-pill,
 .cv-dialog-hint .hint-pill {
   transform: translateY(-1px);
+}
+
+.terminal-shared-link {
+  color: var(--terminal-link-color, inherit);
+  text-decoration: underline;
+  text-decoration-color: var(--terminal-link-underline, rgba(255, 174, 223, 0.75));
+  text-underline-offset: 0.14em;
+}
+
+.terminal-shared-link:visited {
+  color: var(--terminal-link-color, inherit);
+  text-decoration-color: var(--terminal-link-underline, rgba(255, 174, 223, 0.75));
+}
+
+.terminal-shared-link:hover {
+  color: var(--terminal-link-hover-color, #fff2fa);
+  text-decoration-color: var(--terminal-link-hover-underline, #ffaadf);
 }
 
 @media (max-width: 700px) {

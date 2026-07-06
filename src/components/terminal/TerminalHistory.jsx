@@ -33,7 +33,7 @@ const renderTextWithMarkdownLinks = (text) => {
 
     nodes.push(
       <a
-        className="terminal-link"
+        className="terminal-link terminal-shared-link"
         href={href}
         key={`link-${matchIndex}`}
         target="_blank"

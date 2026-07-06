@@ -167,14 +167,10 @@
 }
 
 .card-link {
-  color: inherit;
-  text-decoration-color: rgba(255, 174, 223, 0.75);
-  text-underline-offset: 0.14em;
-}
-
-.card-link:hover {
-  color: #fff2fa;
-  text-decoration-color: #ffaadf;
+  --terminal-link-color: inherit;
+  --terminal-link-underline: rgba(255, 174, 223, 0.75);
+  --terminal-link-hover-color: #fff2fa;
+  --terminal-link-hover-underline: #ffaadf;
 }
 
 .card-hint {

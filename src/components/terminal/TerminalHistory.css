@@ -45,17 +45,15 @@
 }
 
 .terminal-link {
-  color: #ffd1ee;
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
-}
-
-.terminal-link:hover {
-  color: #ffe9f7;
+  --terminal-link-color: #ffd1ee;
+  --terminal-link-underline: rgba(255, 174, 223, 0.75);
+  --terminal-link-hover-color: #fff2fa;
+  --terminal-link-hover-underline: #ffaadf;
 }
 
 .terminal-hint-line {
   margin-top: 0.65rem;
+  margin-bottom: 0.65rem;
   padding-top: 0.85rem;
   border-top: 1px solid rgba(246, 217, 236, 0.2);
   display: flex;
@@ -67,6 +65,8 @@
 .terminal-hint-label {
   color: #f6d9ec;
   font-weight: 600;
+  position: relative;
+  top: 0.2rem;
 }
 
 .rich-output {

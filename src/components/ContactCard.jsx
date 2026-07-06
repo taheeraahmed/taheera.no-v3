@@ -1,5 +1,6 @@
 import { Email, GitHub, LinkedIn } from '@mui/icons-material'
 import { FaTiktok } from 'react-icons/fa'
+import './terminal/TerminalShared.css'
 import HintActionButton from './HintActionButton'
 import './ContactCard.css'
 
@@ -112,7 +113,7 @@ function ContactCard({ card, ui, onClose, onNameHover, onNameClick, isCatPartyAc
               <dt>{cardLabels[row.labelKey]}</dt>
               <dd>
                 {row.link ? (
-                  <a className="card-link" href={toExternalHref(card[row.key])} target="_blank" rel="noreferrer">
+                  <a className="card-link terminal-shared-link" href={toExternalHref(card[row.key])} target="_blank" rel="noreferrer">
                     {card[row.key]}
                   </a>
                 ) : (

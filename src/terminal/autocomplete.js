@@ -96,3 +96,87 @@ export const completePathArgument = (line, command, terminalTree, cwd) => {
 
   return null
 }
+
+export const getTabCompletionUpdate = ({ line, cwd, terminalTree, tabCompletion }) => {
+  if (!line.trim()) {
+    return { handled: false }
+  }
+
+  if (!line.includes(' ')) {
+    return {
+      handled: true,
+      nextInput: completeCommand(line.trim()),
+      nextTabCompletion: null,
+    }
+  }
+
+  const [command] = line.trim().split(/\s+/)
+  if (!pathCommands.includes(command)) {
+    return {
+      handled: true,
+      nextTabCompletion: null,
+    }
+  }
+
+  if (tabCompletion && tabCompletion.command === command && tabCompletion.suggestions.length > 1) {
+    const nextIndex = (tabCompletion.index + 1) % tabCompletion.suggestions.length
+    const nextSuggestion = tabCompletion.suggestions[nextIndex]
+
+    return {
+      handled: true,
+      nextInput: [command, nextSuggestion].join(' '),
+      nextTabCompletion: { ...tabCompletion, index: nextIndex },
+    }
+  }
+
+  const completed = completePathArgument(line, command, terminalTree, cwd)
+  if (completed) {
+    return {
+      handled: true,
+      nextInput: completed,
+      nextTabCompletion: null,
+    }
+  }
+
+  const rawPath = line.trim().split(/\s+/).slice(1).join(' ')
+  const suggestions = getPathSuggestions(terminalTree, cwd, rawPath, {
+    directoriesOnly: command === 'cd',
+  })
+
+  if (suggestions.length > 1) {
+    return {
+      handled: true,
+      nextInput: [command, suggestions[0]].join(' '),
+      nextTabCompletion: { command, suggestions, index: 0 },
+    }
+  }
+
+  return {
+    handled: true,
+    nextTabCompletion: null,
+  }
+}
+
+export const getSubmitUpdate = ({ line, cwd, terminalTree }) => {
+  const commandLine = line.trim()
+  if (!commandLine) {
+    return { shouldExecute: true }
+  }
+
+  const [command, ...args] = commandLine.split(/\s+/)
+  const rawPath = args.join(' ')
+  if ((command !== 'cat' && command !== 'open') || !rawPath) {
+    return { shouldExecute: true }
+  }
+
+  const node = findNode(terminalTree, resolvePath(cwd, rawPath))
+  if (node?.type !== 'dir') {
+    return { shouldExecute: true }
+  }
+
+  const normalizedDirectoryPath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`
+  return {
+    shouldExecute: false,
+    nextInput: `${command} ${normalizedDirectoryPath}`,
+  }
+}

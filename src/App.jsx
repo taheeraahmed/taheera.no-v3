@@ -6,8 +6,8 @@ import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
 import useDraggableWindow from './hooks/useDraggableWindow'
 import usePortfolioWindows from './hooks/usePortfolioWindows'
-import { CV_FILE_NAME, pathCommands } from './terminal/constants'
-import { completeCommand, completePathArgument } from './terminal/autocomplete'
+import { CV_FILE_NAME } from './terminal/constants'
+import { getSubmitUpdate, getTabCompletionUpdate } from './terminal/autocomplete'
 import { runCommand } from './terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
 import { createInitialHistory, getWelcomeText, formatPrompt } from './terminal/formatters'
@@ -36,6 +36,7 @@ function App() {
   const [commandHistory, setCommandHistory] = useState([])
   const [historyIndex, setHistoryIndex] = useState(null)
   const [draftInput, setDraftInput] = useState('')
+  const [tabCompletion, setTabCompletion] = useState(null)
   const {
     activeWindow,
     closeCvDialog,
@@ -113,6 +114,13 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault()
 
+    const submitUpdate = getSubmitUpdate({ line: input, cwd, terminalTree })
+    if (!submitUpdate.shouldExecute) {
+      setInput(submitUpdate.nextInput)
+      setTabCompletion(null)
+      return
+    }
+
     const commandLine = input.trim()
     if (commandLine) {
       setCommandHistory((prev) => [...prev, commandLine])
@@ -120,6 +128,7 @@ function App() {
 
     setHistoryIndex(null)
     setDraftInput('')
+    setTabCompletion(null)
     handleRunCommand(input)
     setInput('')
   }
@@ -131,6 +140,7 @@ function App() {
       }
 
       event.preventDefault()
+      setTabCompletion(null)
 
       if (historyIndex === null) {
         setDraftInput(input)
@@ -152,6 +162,7 @@ function App() {
       }
 
       event.preventDefault()
+      setTabCompletion(null)
 
       if (historyIndex >= commandHistory.length - 1) {
         setHistoryIndex(null)
@@ -170,26 +181,23 @@ function App() {
     }
 
     event.preventDefault()
-    const line = input
+    const tabUpdate = getTabCompletionUpdate({
+      line: input,
+      cwd,
+      terminalTree,
+      tabCompletion,
+    })
 
-    if (!line.trim()) {
+    if (!tabUpdate.handled) {
       return
     }
 
-    if (!line.includes(' ')) {
-      const completed = completeCommand(line.trim())
-      if (completed) {
-        setInput(completed)
-      }
-      return
+    if ('nextTabCompletion' in tabUpdate) {
+      setTabCompletion(tabUpdate.nextTabCompletion)
     }
 
-    const [command] = line.trim().split(/\s+/)
-    if (pathCommands.includes(command)) {
-      const completed = completePathArgument(line, command, terminalTree, cwd)
-      if (completed) {
-        setInput(completed)
-      }
+    if (tabUpdate.nextInput) {
+      setInput(tabUpdate.nextInput)
     }
   }
 
@@ -224,6 +232,15 @@ function App() {
 
   const isInteractiveTarget = (target) => {
     return target instanceof Element && target.closest('button, a, input, label')
+  }
+
+  const formatSuggestionLabel = (suggestion) => {
+    const hasTrailingSlash = suggestion.endsWith('/')
+    const normalized = hasTrailingSlash ? suggestion.slice(0, -1) : suggestion
+    const parts = normalized.split('/').filter(Boolean)
+    const baseName = parts[parts.length - 1] ?? suggestion
+
+    return hasTrailingSlash ? `${baseName}/` : baseName
   }
 
   const handleWindowMouseDown = (event) => {
@@ -339,6 +356,7 @@ function App() {
                   value={input}
                   onChange={(event) => {
                     setInput(event.target.value)
+                    setTabCompletion(null)
                     if (historyIndex !== null) {
                       setHistoryIndex(null)
                     }
@@ -350,6 +368,19 @@ function App() {
                   aria-label={terminalStrings.shellInputAria}
                 />
               </form>
+
+              {tabCompletion && tabCompletion.suggestions.length > 1 ? (
+                <div className="autocomplete-suggestions" aria-live="polite">
+                  {tabCompletion.suggestions.map((suggestion, index) => (
+                    <span
+                      key={suggestion}
+                      className={`autocomplete-suggestion${index === tabCompletion.index ? ' is-selected' : ''}`}
+                    >
+                      {formatSuggestionLabel(suggestion)}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </TerminalWindow>
 

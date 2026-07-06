@@ -1,5 +1,3 @@
-import { hintCommands } from './constants'
-
 export const formatPath = (segments) => (segments.length ? `/${segments.join('/')}` : '/')
 
 export const formatPrompt = (segments) => `you@taheera.no:${formatPath(segments)}$`
@@ -40,7 +38,7 @@ export const formatLastLogin = (date = new Date()) => {
 
 export const getWelcomeText = (content) => content.welcomeLines.join('\n').replace(/^\n+|\n+$/g, '')
 
-export const createInitialHistory = (content) => [
+export const createInitialHistory = (content, terminalStrings) => [
   {
     type: 'output',
     text: formatLastLogin(),
@@ -56,6 +54,6 @@ export const createInitialHistory = (content) => [
   },
   {
     type: 'hint',
-    commands: hintCommands,
+    commands: terminalStrings.hintCommands,
   },
 ]

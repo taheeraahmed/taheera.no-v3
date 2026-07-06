@@ -1,14 +1,18 @@
-import { CV_FILE_NAME, helpText } from './constants'
+import { CV_FILE_NAME } from './constants'
 import { findNode, formatFileName, resolvePath } from './filesystem'
 import { formatPath } from './formatters'
+import { DEFAULT_LANGUAGE, getTerminalStrings, normalizeLanguage } from './i18n'
 
 export const runCommand = ({
   rawInput,
+  language,
   cwd,
   terminalTree,
+  terminalStrings,
   welcomeText,
   appendEntries,
   setCwd,
+  setLanguage,
   setHistory,
   hideCard,
   openCvDialog,
@@ -30,7 +34,7 @@ export const runCommand = ({
   }
 
   if (command === 'help') {
-    appendEntries([baseEntry, { type: 'help', text: helpText }])
+    appendEntries([baseEntry, { type: 'help', text: terminalStrings.helpText }])
     return
   }
 
@@ -51,7 +55,7 @@ export const runCommand = ({
     if (!node) {
       appendEntries([
         baseEntry,
-        { type: 'error', text: `ls: cannot access '${args[0]}': No such file or directory` },
+        { type: 'error', text: terminalStrings.lsCannotAccess(args[0]) },
       ])
       return
     }
@@ -65,7 +69,7 @@ export const runCommand = ({
       .map(([name, child]) => (child.type === 'dir' ? `${name}/` : formatFileName(name)))
       .join('    ')
 
-    appendEntries([baseEntry, { type: 'output', text: listing || '(empty)' }])
+    appendEntries([baseEntry, { type: 'output', text: listing || terminalStrings.emptyDirectory }])
     return
   }
 
@@ -76,13 +80,13 @@ export const runCommand = ({
     if (!node) {
       appendEntries([
         baseEntry,
-        { type: 'error', text: `cd: no such file or directory: ${args[0]}` },
+        { type: 'error', text: terminalStrings.cdNoSuchDirectory(args[0]) },
       ])
       return
     }
 
     if (node.type !== 'dir') {
-      appendEntries([baseEntry, { type: 'error', text: `cd: not a directory: ${args[0]}` }])
+      appendEntries([baseEntry, { type: 'error', text: terminalStrings.cdNotDirectory(args[0]) }])
       return
     }
 
@@ -93,7 +97,7 @@ export const runCommand = ({
 
   if (command === 'cat') {
     if (!args[0]) {
-      appendEntries([baseEntry, { type: 'error', text: 'cat: missing file operand' }])
+      appendEntries([baseEntry, { type: 'error', text: terminalStrings.catMissingOperand }])
       return
     }
 
@@ -101,12 +105,12 @@ export const runCommand = ({
     const node = findNode(terminalTree, targetPath)
 
     if (!node) {
-      appendEntries([baseEntry, { type: 'error', text: `cat: ${args[0]}: No such file or directory` }])
+      appendEntries([baseEntry, { type: 'error', text: terminalStrings.catNoSuchFile(args[0]) }])
       return
     }
 
     if (node.type !== 'file') {
-      appendEntries([baseEntry, { type: 'error', text: `cat: ${args[0]}: Is a directory` }])
+      appendEntries([baseEntry, { type: 'error', text: terminalStrings.catIsDirectory(args[0]) }])
       return
     }
 
@@ -124,7 +128,7 @@ export const runCommand = ({
 
   if (command === 'open') {
     if (!args[0]) {
-      appendEntries([baseEntry, { type: 'error', text: 'open: missing file operand' }])
+      appendEntries([baseEntry, { type: 'error', text: terminalStrings.openMissingOperand }])
       return
     }
 
@@ -132,7 +136,7 @@ export const runCommand = ({
     const node = findNode(terminalTree, targetPath)
 
     if (!node || node.type !== 'file') {
-      appendEntries([baseEntry, { type: 'error', text: `open: cannot open '${args[0]}'` }])
+      appendEntries([baseEntry, { type: 'error', text: terminalStrings.openCannotOpen(args[0]) }])
       return
     }
 
@@ -140,13 +144,49 @@ export const runCommand = ({
     if (targetName !== CV_FILE_NAME) {
       appendEntries([
         baseEntry,
-        { type: 'error', text: `open: '${targetName}' does not support browser preview` },
+        { type: 'error', text: terminalStrings.openNoPreview(targetName) },
       ])
       return
     }
 
     openCvDialog()
-    appendEntries([baseEntry, { type: 'output', text: `Opening ${CV_FILE_NAME}...` }])
+    appendEntries([baseEntry, { type: 'output', text: terminalStrings.openingCv }])
+    return
+  }
+
+  if (command === 'lang' || command === 'language') {
+    const value = args[0]
+    const defaultTerminalStrings = getTerminalStrings(DEFAULT_LANGUAGE)
+    const languageTerminalStrings = { ...defaultTerminalStrings, ...terminalStrings }
+
+    if (!value || value.toLowerCase() === 'list') {
+      appendEntries([baseEntry, { type: 'output', text: languageTerminalStrings.langCurrent(language) }])
+      return
+    }
+
+    const normalized = normalizeLanguage(value)
+    if (!normalized) {
+      appendEntries([
+        baseEntry,
+        {
+          type: 'error',
+          text: `${languageTerminalStrings.langUnsupported(value)}\n${languageTerminalStrings.langUsage}`,
+        },
+      ])
+      return
+    }
+
+    if (normalized === language) {
+      appendEntries([baseEntry, { type: 'output', text: languageTerminalStrings.langAlreadySet(language) }])
+      return
+    }
+
+    setLanguage(normalized)
+    const nextLanguageTerminalStrings = {
+      ...defaultTerminalStrings,
+      ...getTerminalStrings(normalized),
+    }
+    appendEntries([baseEntry, { type: 'output', text: nextLanguageTerminalStrings.langChanged(normalized) }])
     return
   }
 
@@ -161,8 +201,8 @@ export const runCommand = ({
           type: 'error',
           text:
             command === 'bash'
-              ? `bash: ${scriptName}: No such file or directory`
-              : `${command}: command not found`,
+              ? terminalStrings.bashNoSuchFile(scriptName)
+              : terminalStrings.commandNotFound(command),
         },
       ])
       return
@@ -174,5 +214,5 @@ export const runCommand = ({
     return
   }
 
-  appendEntries([baseEntry, { type: 'error', text: `${command}: command not found` }])
+  appendEntries([baseEntry, { type: 'error', text: terminalStrings.commandNotFound(command) }])
 }

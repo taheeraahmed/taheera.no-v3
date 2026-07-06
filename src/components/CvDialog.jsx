@@ -4,7 +4,7 @@ import TerminalWindow from './terminal/TerminalWindow'
 import useDraggableWindow from '../hooks/useDraggableWindow'
 import './CvDialog.css'
 
-function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
+function CvDialog({ isOpen, fileName, onClose, isActive, onActivate, ui }) {
   const dialogRef = useRef(null)
   const { offset, isDragging, handleDragStart, resetOffset } = useDraggableWindow({
     getBounds: () => {
@@ -45,6 +45,7 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
         ref={dialogRef}
         title={fileName}
         onClose={onClose}
+        closeLabel={ui?.closeButtonAriaLabel ?? 'Close'}
         onDragStart={handleDragStart}
         onMouseDown={activateDialog}
         onClick={activateDialog}
@@ -53,14 +54,14 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
         style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
         role="dialog"
         aria-modal="false"
-        aria-label="CV preview"
+        aria-label={ui?.cvPreviewAriaLabel ?? 'CV preview'}
       >
         <div className="cv-display">
           {!isActive ? (
             <button
               type="button"
               className="cv-activation-overlay"
-              aria-label="Activate CV window"
+              aria-label={ui?.activateCvWindowAriaLabel ?? 'Activate CV window'}
               onClick={activateDialog}
               onMouseDown={activateDialog}
             />
@@ -68,12 +69,17 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate }) {
           <iframe
             className="cv-frame"
             src={`/${fileName}#toolbar=1&navpanes=0`}
-            title="Taheera CV"
+            title={ui?.cvFrameTitle ?? 'Taheera CV'}
             onPointerDown={activateDialog}
             onFocus={activateDialog}
           />
         </div>
-        <HintActionButton className="cv-dialog-hint" onClick={onClose} suffix="to close" />
+        <HintActionButton
+          className="cv-dialog-hint"
+          onClick={onClose}
+          prefix={ui?.escapePrefix ?? 'Press'}
+          suffix={ui?.closeDialogSuffix ?? 'to close'}
+        />
       </TerminalWindow>
     </div>
   )

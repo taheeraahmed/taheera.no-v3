@@ -1,0 +1,114 @@
+import { CV_FILE_NAME } from './constants'
+
+export const DEFAULT_LANGUAGE = 'en'
+export const SUPPORTED_LANGUAGES = ['en', 'no']
+
+const languageLabels = {
+  en: 'English',
+  no: 'Norsk',
+}
+
+const normalizeMap = {
+  en: 'en',
+  english: 'en',
+  no: 'no',
+  nb: 'no',
+  nn: 'no',
+  norsk: 'no',
+  norwegian: 'no',
+}
+
+const terminalMessages = {
+  en: {
+    windowTitle: 'simple-but-enhanced-cool-shell',
+    inputPlaceholder: 'Type a command...',
+    shellInputAria: 'Shell command input',
+    terminalAria: 'Interactive shell portfolio',
+    contactCardAria: 'Contact card',
+    emptyDirectory: '(empty)',
+    openingCv: `Opening ${CV_FILE_NAME}...`,
+    commandNotFound: (command) => `${command}: command not found`,
+    lsCannotAccess: (target) => `ls: cannot access '${target}': No such file or directory`,
+    cdNoSuchDirectory: (target) => `cd: no such file or directory: ${target}`,
+    cdNotDirectory: (target) => `cd: not a directory: ${target}`,
+    catMissingOperand: 'cat: missing file operand',
+    catNoSuchFile: (target) => `cat: ${target}: No such file or directory`,
+    catIsDirectory: (target) => `cat: ${target}: Is a directory`,
+    openMissingOperand: 'open: missing file operand',
+    openCannotOpen: (target) => `open: cannot open '${target}'`,
+    openNoPreview: (target) => `open: '${target}' does not support browser preview`,
+    bashNoSuchFile: (target) => `bash: ${target}: No such file or directory`,
+    langUsage: 'Usage: lang <en|no> or lang list',
+    langCurrent: (lang) =>
+      `Current language: ${languageLabels[lang] ?? lang} (${lang})\nAvailable languages: ${SUPPORTED_LANGUAGES.join(', ')}`,
+    langChanged: (lang) => `Language switched to ${languageLabels[lang] ?? lang} (${lang}).`,
+    langAlreadySet: (lang) => `Language is already ${languageLabels[lang] ?? lang} (${lang}).`,
+    langUnsupported: (value) =>
+      `Unsupported language '${value}'. Available languages: ${SUPPORTED_LANGUAGES.join(', ')}`,
+    hintCommands: ['help', 'ls', 'bash card.sh', `open ${CV_FILE_NAME}`, 'lang no'],
+    helpText: [
+      'Commands:',
+      '  help              Show available commands',
+      '  welcome           Quick intro about me',
+      '  ls [path]         List files and folders',
+      '  cd <path>         Change directory',
+      '  pwd               Print current path',
+      '  cat <file>        Read a file',
+      '  open <file>       Open a .pdf file',
+      '  bash <file>       Run a shell script',
+      '  lang <code>       Switch language (en/no)',
+      '  clear             Clear terminal output',
+    ].join('\n'),
+  },
+  no: {
+    windowTitle: 'simple-but-enhanced-cool-shell',
+    inputPlaceholder: 'Skriv en kommando...',
+    shellInputAria: 'Shell kommando input',
+    terminalAria: 'Interaktivt shell-portfolio',
+    contactCardAria: 'Kontaktkort',
+    emptyDirectory: '(tom)',
+    openingCv: `Åpner ${CV_FILE_NAME}...`,
+    commandNotFound: (command) => `${command}: kommando ikke funnet`,
+    lsCannotAccess: (target) => `ls: kan ikke åpne '${target}': filen eller mappen finnes ikke`,
+    cdNoSuchDirectory: (target) => `cd: mappen finnes ikke: ${target}`,
+    cdNotDirectory: (target) => `cd: ikke en mappe: ${target}`,
+    catMissingOperand: 'cat: manglende fil-argument',
+    catNoSuchFile: (target) => `cat: ${target}: filen finnes ikke`,
+    catIsDirectory: (target) => `cat: ${target}: er en mappe`,
+    openMissingOperand: 'open: manglende fil-argument',
+    openCannotOpen: (target) => `open: kan ikke åpne '${target}'`,
+    openNoPreview: (target) => `open: '${target}' støtter ikke nettleserforhåndsvisning`,
+    bashNoSuchFile: (target) => `bash: ${target}: filen finnes ikke`,
+    langUsage: 'Bruk: lang <en|no> eller lang list',
+    langCurrent: (lang) =>
+      `Gjeldende språk: ${languageLabels[lang] ?? lang} (${lang})\nTilgjengelige språk: ${SUPPORTED_LANGUAGES.join(', ')}`,
+    langChanged: (lang) => `Språk byttet til ${languageLabels[lang] ?? lang} (${lang}).`,
+    langAlreadySet: (lang) => `Språk er allerede ${languageLabels[lang] ?? lang} (${lang}).`,
+    langUnsupported: (value) =>
+      `Støtter ikke språk '${value}'. Tilgjengelige språk: ${SUPPORTED_LANGUAGES.join(', ')}`,
+    hintCommands: ['help', 'ls', 'bash card.sh', `open ${CV_FILE_NAME}`, 'lang en'],
+    helpText: [
+      'Kommandoer:',
+      '  help              Vis tilgjengelige kommandoer',
+      '  welcome           Kort intro om meg',
+      '  ls [path]         List filer og mapper',
+      '  cd <path>         Bytt mappe',
+      '  pwd               Vis gjeldende sti',
+      '  cat <file>        Les en fil',
+      '  open <file>       Åpne en .pdf fil',
+      '  bash <file>       Kjør et shell-script',
+      '  lang <code>       Bytt språk (en/no)',
+      '  clear             Tøm terminalutskriften',
+    ].join('\n'),
+  },
+}
+
+export const normalizeLanguage = (value) => normalizeMap[value?.toLowerCase()] ?? null
+
+export const getTerminalStrings = (language) => {
+  if (terminalMessages[language]) {
+    return terminalMessages[language]
+  }
+
+  return terminalMessages[DEFAULT_LANGUAGE]
+}

@@ -26,6 +26,7 @@ export const getContentSnapshot = (moduleContent) => ({
   aboutMe: moduleContent.aboutMe,
   contactCard: moduleContent.contactCard,
   welcomeLines: moduleContent.welcomeLines,
+  ui: moduleContent.ui ?? {},
 })
 
 const objectToFiles = (entries) =>

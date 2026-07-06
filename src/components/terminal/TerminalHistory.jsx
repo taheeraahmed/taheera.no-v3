@@ -13,6 +13,10 @@ const renderHintEntry = (commands, index, onHintClick) => (
 )
 
 const renderTextWithMarkdownLinks = (text) => {
+  if (!text) {
+    return ''
+  }
+
   const nodes = []
   const linkPattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g
   let cursor = 0

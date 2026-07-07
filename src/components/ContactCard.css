@@ -70,6 +70,7 @@
   text-align: left;
   text-shadow: 0 0 0 transparent;
   transition: color 160ms ease, text-shadow 160ms ease;
+  animation: card-name-glitch 3000ms steps(1, end) infinite;
 }
 
 .card-name-trigger:hover,
@@ -77,6 +78,7 @@
 .card-name-trigger.is-active {
   color: #ffe5f7;
   text-shadow: 0 0 14px rgba(255, 148, 211, 0.58);
+  animation-duration: 2200ms;
 }
 
 .card-name-trigger:focus-visible {
@@ -217,6 +219,36 @@
   100% {
     opacity: 1;
     transform: rotateX(0deg) translateY(0);
+  }
+}
+
+@keyframes card-name-glitch {
+  0%,
+  75%,
+  100% {
+    transform: translate(0, 0);
+    text-shadow: 0 0 0 transparent;
+  }
+
+  76% {
+    transform: translate(-0.5px, 0.1px) skewX(-3deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.7), 1px 0 0 rgba(255, 115, 194, 0.75);
+  }
+
+  77% {
+    transform: translate(0.5px, -0.1px) skewX(3deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.7), -1px 0 0 rgba(255, 115, 194, 0.75);
+  }
+
+  78% {
+    transform: translate(0, 0);
+    text-shadow: 0 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-name-trigger {
+    animation: none;
   }
 }
 

@@ -56,7 +56,7 @@ const localizedContent = {
 ⣯⠃⠀⠀⠀⠀⠀⠀⢛⣿⠛⠉⠙⢿⣦⣀⣀⣀⣀⣀⣶⠞⠁  
 ⣿⡀⠀⠀⠀⠀⠀⠀⣿⡏⠀⠀⠀⠈⢯⢫⡉⠉⠉⠉⠁⠀ I had fun making this hihi
 ⠙⡷⣄⡀⠀⢀⡤⡺⣿⠀⠀⠀⠀⠀⠈⣇⡇  Hopefully someone sees it <3
-⠀⠈⠛⠛⠛⠛⠋⠀⠘⣆⠀⠀⠀⠀⠀⣿⠇⠀ Repo: [github.com/taheeraahmed/taheera.no-vol-3](https://github.com/taheeraahmed/taheera.no-vol-3)⠀⠀⠀                                        
+⠀⠈⠛⠛⠛⠛⠋⠀⠘⣆⠀⠀⠀⠀⠀⣿⠇⠀ Repo: [github.com/taheeraahmed/taheera.no-v3](https://github.com/taheeraahmed/taheera.no-v3)⠀⠀⠀                                        
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢷⣤⣀⣤⣖⠏⠀⠀
 `,
     ],
@@ -113,7 +113,7 @@ const localizedContent = {
 ⣯⠃⠀⠀⠀⠀⠀⠀⢛⣿⠛⠉⠙⢿⣦⣀⣀⣀⣀⣀⣶⠞⠁  
 ⣿⡀⠀⠀⠀⠀⠀⠀⣿⡏⠀⠀⠀⠈⢯⢫⡉⠉⠉⠉⠁⠀ Jeg koste meg med å lage dette hihi
 ⠙⡷⣄⡀⠀⢀⡤⡺⣿⠀⠀⠀⠀⠀⠈⣇⡇  håper noen ser den <3
-⠀⠈⠛⠛⠛⠛⠋⠀⠘⣆⠀⠀⠀⠀⠀⣿⠇⠀ Repo: [github.com/taheeraahmed/taheera.no-vol-3](https://github.com/taheeraahmed/taheera.no-vol-3)
+⠀⠈⠛⠛⠛⠛⠋⠀⠘⣆⠀⠀⠀⠀⠀⣿⠇⠀ Repo: [github.com/taheeraahmed/taheera.no-v3](https://github.com/taheeraahmed/taheera.no-v3)
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢷⣤⣀⣤⣖⠏⠀⠀
 `,
     ],

@@ -48,9 +48,6 @@ function usePortfolioWindows() {
 
       if (isCardFlipped) {
         hideCard()
-        if (isCvDialogOpen) {
-          setCvActive()
-        }
         return
       }
 
@@ -61,7 +58,7 @@ function usePortfolioWindows() {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [activeWindow, closeCvDialog, hideCard, isCardFlipped, isCvDialogOpen, setCvActive])
+  }, [activeWindow, closeCvDialog, hideCard, isCardFlipped, isCvDialogOpen])
 
   useEffect(() => {
     if (!isCvDialogOpen) {

@@ -61,6 +61,14 @@ function App() {
   }, [history])
 
   useEffect(() => {
+    if (!tabCompletion || tabCompletion.suggestions.length <= 1) {
+      return
+    }
+
+    historyEndRef.current?.scrollIntoView({ block: 'end' })
+  }, [tabCompletion])
+
+  useEffect(() => {
     setContent(getContentSnapshot(getLocalizedContent(language)))
   }, [language])
 
@@ -319,19 +327,6 @@ function App() {
           >
             <div className="terminal-screen">
               <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick}>
-                {tabCompletion && tabCompletion.suggestions.length > 1 ? (
-                  <div className="autocomplete-suggestions" aria-live="polite">
-                    {tabCompletion.suggestions.map((suggestion, index) => (
-                      <span
-                        key={suggestion}
-                        className={`autocomplete-suggestion${index === tabCompletion.index ? ' is-selected' : ''}`}
-                      >
-                        {formatSuggestionLabel(suggestion)}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-
                 <form className="command-form" onSubmit={handleSubmit}>
                   <label htmlFor="command-input" className="prompt">
                     {formatPrompt(cwd)}
@@ -348,6 +343,19 @@ function App() {
                     aria-label={terminalStrings.shellInputAria}
                   />
                 </form>
+
+                {tabCompletion && tabCompletion.suggestions.length > 1 ? (
+                  <div className="autocomplete-suggestions" aria-live="polite">
+                    {tabCompletion.suggestions.map((suggestion, index) => (
+                      <span
+                        key={suggestion}
+                        className={`autocomplete-suggestion${index === tabCompletion.index ? ' is-selected' : ''}`}
+                      >
+                        {formatSuggestionLabel(suggestion)}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
               </TerminalHistory>
             </div>
           </TerminalWindow>

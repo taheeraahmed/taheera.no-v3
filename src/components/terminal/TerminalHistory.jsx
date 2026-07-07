@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { formatPrompt, splitCommandParts, splitHelpLineParts } from '../../terminal/formatters'
 import './TerminalHistory.css'
 
@@ -54,6 +55,69 @@ const renderTextWithMarkdownLinks = (text) => {
   return nodes.length ? nodes : text
 }
 
+const getEntryImages = (entry) => {
+  if (Array.isArray(entry.images) && entry.images.length > 0) {
+    return entry.images
+  }
+
+  if (entry.image) {
+    return [entry.image]
+  }
+
+  return []
+}
+
+function RichOutputMediaStack({ images, imageAlt }) {
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const totalImages = images.length
+  const visibleLayers = [0, 1, 2]
+    .filter((offset) => offset < totalImages)
+    .map((offset) => ({
+      imageIndex: (activeIndex + offset) % totalImages,
+      depth: offset,
+    }))
+
+  const renderLayers = [...visibleLayers].reverse()
+
+  const handleCycle = () => {
+    if (totalImages < 2) {
+      return
+    }
+
+    setActiveIndex((previousIndex) => (previousIndex + 1) % totalImages)
+  }
+
+  const stackLabel = totalImages > 1 ? 'Click to cycle photos' : 'Photo preview'
+
+  return (
+    <div className="rich-output-media">
+      <button
+        type="button"
+        className="rich-output-media-stack"
+        onClick={handleCycle}
+        aria-label={stackLabel}
+        title={stackLabel}
+      >
+        {renderLayers.map((layer) => (
+          <img
+            key={`${layer.imageIndex}-${layer.depth}`}
+            className={`stack-card stack-depth-${layer.depth}`}
+            src={images[layer.imageIndex]}
+            alt={imageAlt ?? 'Terminal file image'}
+            draggable={false}
+          />
+        ))}
+      </button>
+      {totalImages > 1 ? (
+        <p className="rich-output-image-counter">
+          {activeIndex + 1}/{totalImages}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
 function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
   return (
     <div className="history" role="log" aria-live="polite">
@@ -100,10 +164,12 @@ function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
           )
         }
 
-        if (entry.type === 'output' && entry.image) {
+        if (entry.type === 'output' && (entry.image || (Array.isArray(entry.images) && entry.images.length > 0))) {
+          const entryImages = getEntryImages(entry)
+
           return (
             <div className="line output rich-output" key={`${entry.type}-${index}`}>
-              <img className="rich-output-image" src={entry.image} alt={entry.imageAlt ?? 'Terminal file image'} />
+              <RichOutputMediaStack images={entryImages} imageAlt={entry.imageAlt} />
               <p className="rich-output-text">{entry.text}</p>
             </div>
           )

@@ -44,7 +44,8 @@ const localizedContent = {
       },
       finishing_my_first_half_marathon: {
         text: 'TODO',
-        image: '/running.jpg',
+        image: '/running_italy.jpg',
+        images: ['/running_italy.jpg', '/running_madrid.JPG', '/running_madrid_2.JPG', '/running_trondheim.JPG'],
         imageAlt: 'Taheera i mål på sitt første halvmaraton',
       },
       women_in_tech: {
@@ -56,7 +57,8 @@ const localizedContent = {
     aboutMe: {
       running: {
         text: "I hated running in 2024, but I was group-pressured into signing up for a half marathon (it was in Italy, so I thought why not?). I finished it, but used SO much time, it was humbling. This is what has fueled my running motivation :) I've ran three half-marathons since, and I'm still running. Hopefully I will manage to run a half-marathon in under two hours? We will see.",
-        image: '/running.jpg',
+        image: '/running_italy.jpg',
+        images: ['/running_italy.jpg', '/running_madrid.JPG', '/running_madrid_2.JPG', '/running_trondheim.JPG'],
         imageAlt: 'Taheera finishing her first half-marathon outdoors',
       },
       knitting: {
@@ -67,6 +69,7 @@ const localizedContent = {
       weightlifting: {
         text: 'Strength training has been part of my routine since high school, I still remember how scary it was entering the gym the first few times. My PR in squats is 115kg (and I weighed 60kg at the time!!)',
         image: '/trene.jpg',
+        images: ['/trene.jpg', '/trene_2.png'],
         imageAlt: 'Taheera at the gym',
       },
       reading: {
@@ -133,7 +136,8 @@ const localizedContent = {
       },
       finishing_my_first_half_marathon: {
         text: 'TODO',
-        image: '/running.jpg',
+        image: '/running_italy.jpg',
+        images: ['/running_italy.jpg', '/running_madrid.JPG', '/running_madrid_2.JPG', '/running_trondheim.JPG'],
         imageAlt: 'Taheera i mål på sitt første halvmaraton',
       },
       women_in_tech: {
@@ -145,7 +149,8 @@ const localizedContent = {
     aboutMe: {
       running: {
         text: 'Jeg hatet løping i 2024, men ble gruppepresset til å melde meg på et halvmaraton (det var i Italia, så jeg tenkte hvorfor ikke?). Jeg fullførte, men brukte VELDIG lang tid.... Det er egentlig dette som har vært hovedgrunnen til at jeg har fortsatt: vil bare ha bedre kondis :,) Siden Italia har jeg løpt tre halvmaraton. Jeg håper jeg klarer å løpe på under 2 timer en dag :)',
-        image: '/running.jpg',
+        image: '/running_italy.jpg',
+        images: ['/running_italy.jpg', '/running_madrid.JPG', '/running_madrid_2.JPG', '/running_trondheim.JPG'],
         imageAlt: 'Taheera i mål på sitt første halvmaraton',
       },
       knitting: {
@@ -156,6 +161,7 @@ const localizedContent = {
       weightlifting: {
         text: 'Jeg har holdt på med styrketrening siden videregående. Jeg husker fortsatt hvor skummelt det var å gå inn på treningssenteret de første gangene. PR i knebøy er 115kg (og jeg veide 60kg da!!).',
         image: '/trene.jpg',
+        images: ['/trene.jpg', '/trene_2.png'],
         imageAlt: 'Taheera på treningssenteret',
       },
       reading: {

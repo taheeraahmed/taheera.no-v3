@@ -11,6 +11,7 @@ const makeFile = (value) => {
       type: 'file',
       content: value.text ?? value.content ?? '',
       image: value.image,
+      images: Array.isArray(value.images) ? value.images : undefined,
       imageAlt: value.imageAlt,
     }
   }

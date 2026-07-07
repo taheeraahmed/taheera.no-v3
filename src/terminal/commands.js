@@ -182,6 +182,7 @@ export const runCommand = ({
           type: 'output',
           text: node.content,
           image: node.image,
+          images: node.images,
           imageAlt: node.imageAlt,
         },
       ])

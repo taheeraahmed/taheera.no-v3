@@ -44,7 +44,7 @@ export const runCommand = ({
   }
 
   if (command === 'welcome') {
-    appendEntries([baseEntry, { type: 'output', text: welcomeText }])
+    appendEntries([baseEntry, { type: 'output', text: welcomeText }, { type: 'hint', commands: terminalStrings.hintCommands }])
     return
   }
 

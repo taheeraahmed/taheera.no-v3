@@ -57,3 +57,4 @@ export const createInitialHistory = (content, terminalStrings) => [
     commands: terminalStrings.hintCommands,
   },
 ]
+

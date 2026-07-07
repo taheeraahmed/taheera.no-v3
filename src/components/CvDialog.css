@@ -46,10 +46,9 @@
   font: 500 0.78rem/1.35 var(--mono);
   letter-spacing: 0.01em;
   color: rgba(242, 239, 255, 0.72);
+  border: 0;
   border-top: 1px solid rgba(231, 145, 204, 0.2);
   background: #2c1a2c;
-  border-inline: none;
-  border-bottom: none;
   width: 100%;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;

@@ -2,23 +2,24 @@
   border: none;
   border-radius: 10px;
   padding: 0;
+  padding-right: 12px;
   flex: 1;
   min-height: 0;
   max-height: none;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.36rem;
 }
 
 .line {
   margin: 0;
   white-space: pre-wrap;
-}
-
-.line + .line {
-  margin-top: 0.36rem;
 }
 
 .prompt {
@@ -42,6 +43,7 @@
 
 .output {
   color: #f2d6e9;
+  line-height: 1.2;
 }
 
 .terminal-link {
@@ -52,14 +54,14 @@
 }
 
 .terminal-hint-line {
-  margin-top: 0.65rem;
-  margin-bottom: 0.65rem;
+  margin-block: 0.65rem;
   padding-top: 0.85rem;
   border-top: 1px solid rgba(246, 217, 236, 0.2);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.4rem;
+  line-height: 1.5;
 }
 
 .terminal-hint-label {
@@ -70,7 +72,6 @@
 }
 
 .rich-output {
-  margin-top: 0.55rem;
   display: grid;
   grid-template-columns: 140px 1fr;
   gap: 0.65rem;
@@ -121,11 +122,6 @@
 }
 
 @media (max-width: 700px) {
-  .history {
-    min-height: 0;
-    max-height: none;
-  }
-
   .rich-output {
     grid-template-columns: 1fr;
   }

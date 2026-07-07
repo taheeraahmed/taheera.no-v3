@@ -54,7 +54,7 @@ const renderTextWithMarkdownLinks = (text) => {
   return nodes.length ? nodes : text
 }
 
-function TerminalHistory({ history, historyEndRef, onHintClick }) {
+function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
   return (
     <div className="history" role="log" aria-live="polite">
       {history.map((entry, index) => {
@@ -119,6 +119,8 @@ function TerminalHistory({ history, historyEndRef, onHintClick }) {
           </p>
         )
       })}
+
+      {children}
 
       <div ref={historyEndRef} />
     </div>

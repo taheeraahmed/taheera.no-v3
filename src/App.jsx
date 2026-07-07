@@ -344,43 +344,43 @@ function App() {
             closeLabel={content.ui?.closeButtonAriaLabel ?? 'Close'}
           >
             <div className="terminal-screen">
-              <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick} />
+              <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick}>
+                {tabCompletion && tabCompletion.suggestions.length > 1 ? (
+                  <div className="autocomplete-suggestions" aria-live="polite">
+                    {tabCompletion.suggestions.map((suggestion, index) => (
+                      <span
+                        key={suggestion}
+                        className={`autocomplete-suggestion${index === tabCompletion.index ? ' is-selected' : ''}`}
+                      >
+                        {formatSuggestionLabel(suggestion)}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
 
-              <form className="command-form" onSubmit={handleSubmit}>
-                <label htmlFor="command-input" className="prompt">
-                  {formatPrompt(cwd)}
-                </label>
-                <input
-                  id="command-input"
-                  ref={inputRef}
-                  value={input}
-                  onChange={(event) => {
-                    setInput(event.target.value)
-                    setTabCompletion(null)
-                    if (historyIndex !== null) {
-                      setHistoryIndex(null)
-                    }
-                  }}
-                  onKeyDown={handleInputKeyDown}
-                  autoComplete="off"
-                  spellCheck="false"
-                  placeholder={terminalStrings.inputPlaceholder}
-                  aria-label={terminalStrings.shellInputAria}
-                />
-              </form>
-
-              {tabCompletion && tabCompletion.suggestions.length > 1 ? (
-                <div className="autocomplete-suggestions" aria-live="polite">
-                  {tabCompletion.suggestions.map((suggestion, index) => (
-                    <span
-                      key={suggestion}
-                      className={`autocomplete-suggestion${index === tabCompletion.index ? ' is-selected' : ''}`}
-                    >
-                      {formatSuggestionLabel(suggestion)}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
+                <form className="command-form" onSubmit={handleSubmit}>
+                  <label htmlFor="command-input" className="prompt">
+                    {formatPrompt(cwd)}
+                  </label>
+                  <input
+                    id="command-input"
+                    ref={inputRef}
+                    value={input}
+                    onChange={(event) => {
+                      setInput(event.target.value)
+                      setTabCompletion(null)
+                      if (historyIndex !== null) {
+                        setHistoryIndex(null)
+                      }
+                    }}
+                    onKeyDown={handleInputKeyDown}
+                    autoComplete="off"
+                    spellCheck="false"
+                    placeholder={terminalStrings.inputPlaceholder}
+                    aria-label={terminalStrings.shellInputAria}
+                  />
+                </form>
+              </TerminalHistory>
             </div>
           </TerminalWindow>
 

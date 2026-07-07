@@ -2,48 +2,28 @@
   width: 0.66rem;
   height: 0.66rem;
   border-radius: 50%;
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: default;
 }
 
-.dot::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: rgba(28, 18, 24, 0.72);
-  font-size: 0.66rem;
-  font-weight: 700;
-  line-height: 0.9;
-  opacity: 0;
-  pointer-events: none;
+.close,
+.minimize,
+.maximize {
+  background: var(--dot-color);
 }
 
 .close {
-  background: #ff5f56;
-}
-
-.close::before {
-  content: 'x';
+  --dot-color: #ff5f56;
 }
 
 .minimize {
-  background: #ffbd2e;
-}
-
-.minimize::before {
-  content: '-';
+  --dot-color: #ffbd2e;
 }
 
 .maximize {
-  background: #27c93f;
-}
-
-.maximize::before {
-  content: '+';
+  --dot-color: #27c93f;
 }
 
 .hint-pill {
@@ -68,16 +48,12 @@
   transform: translateY(-1px);
 }
 
-.terminal-shared-link {
+.terminal-shared-link,
+.terminal-shared-link:visited {
   color: var(--terminal-link-color, inherit);
   text-decoration: underline;
   text-decoration-color: var(--terminal-link-underline, rgba(255, 174, 223, 0.75));
   text-underline-offset: 0.14em;
-}
-
-.terminal-shared-link:visited {
-  color: var(--terminal-link-color, inherit);
-  text-decoration-color: var(--terminal-link-underline, rgba(255, 174, 223, 0.75));
 }
 
 .terminal-shared-link:hover {

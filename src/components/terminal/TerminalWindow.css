@@ -49,7 +49,7 @@
 .terminal-bar p {
   margin: 0;
   color: rgba(242, 239, 255, 0.84);
-  font: 500 0.78rem/1.2 var(--mono);
+  font-family: var(--mono);
   letter-spacing: 0.045em;
 }
 
@@ -60,7 +60,7 @@
   display: flex;
   flex-direction: column;
   color: var(--shell-text);
-  font: 0.9rem/1.45 var(--mono);
+  font-family: var(--mono);
   background:
     radial-gradient(circle at 92% 8%, rgba(236, 140, 196, 0.16), transparent 44%),
     #241422;
@@ -68,14 +68,16 @@
 
 .command-form {
   flex-shrink: 0;
-  margin-top: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0;
+  height: 1.5em;
+  line-height: 1.5em;
 }
 
 .command-form .prompt {
   margin-right: 1ch;
+  line-height: 1.5em;
 }
 
 .command-form input {
@@ -83,8 +85,10 @@
   border: none;
   background: transparent;
   color: #fff0fa;
-  font: inherit;
+  font-family: var(--mono);
   min-width: 0;
+  height: 1.5em;
+  line-height: 1.5em;
 }
 
 .command-form input:focus {
@@ -96,7 +100,6 @@
 }
 
 .autocomplete-suggestions {
-  margin-top: 0.15rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
@@ -111,33 +114,14 @@
 }
 
 .autocomplete-suggestion.is-selected {
-  padding: 0;
   background: rgba(255, 84, 176, 0.35);
   color: #fff8fd;
 }
 
 @media (max-width: 700px) {
-  .terminal-window {
-    height: 100%;
-  }
-
   .terminal-screen {
     padding: 0.85rem;
     font-size: 0.86rem;
-  }
-
-  .command-form {
-    align-items: center;
-    flex-direction: row;
-    gap: 0;
-  }
-
-  .command-form .prompt {
-    margin-right: 1ch;
-  }
-
-  .command-form input {
-    width: auto;
   }
 
   .autocomplete-suggestions {

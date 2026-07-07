@@ -74,10 +74,6 @@
   backface-visibility: hidden;
 }
 
-.terminal-face-front {
-  transform: rotateY(0deg);
-}
-
 .terminal-face-back {
   transform: rotateY(180deg);
   pointer-events: none;
@@ -88,9 +84,6 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: transparent;
-  box-shadow: none;
-  border: none;
 }
 
 .mobile-contact-only {

@@ -43,7 +43,12 @@
 
 .output {
   color: #f2d6e9;
-  line-height: 1.2;
+  line-height: 1.5;
+  tab-size: 4;
+}
+
+.terminal-directory-item {
+  color: #c995ff;
 }
 
 .terminal-link {

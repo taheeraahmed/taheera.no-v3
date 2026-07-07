@@ -1,6 +1,6 @@
 import { CV_FILE_NAME } from './constants'
-import { findNode, formatFileName, resolvePath } from './filesystem'
-import { formatPath } from './formatters'
+import { compareDirectoryEntries, findNode, formatFileName, resolvePath } from './filesystem'
+import { formatPath, formatTerminalListColumns, formatTerminalListColumnsWithMeta } from './formatters'
 import { DEFAULT_LANGUAGE, getTerminalStrings, normalizeLanguage } from './i18n'
 
 const appendErrorEntry = (appendEntries, baseEntry, text) => {
@@ -116,10 +116,23 @@ export const runCommand = ({
       }
 
       const listing = Object.entries(node.children)
-        .map(([name, child]) => (child.type === 'dir' ? `${name}/` : formatFileName(name)))
-        .join('    ')
+        .sort(compareDirectoryEntries)
+        .map(([name, child]) => ({
+          label: child.type === 'dir' ? `${name}/` : formatFileName(name),
+          isDirectory: child.type === 'dir',
+        }))
 
-      appendOutputEntry(appendEntries, baseEntry, listing || terminalStrings.emptyDirectory)
+      const formattedListing = formatTerminalListColumns(listing.map((item) => item.label))
+      const listingColumns = formatTerminalListColumnsWithMeta(listing)
+
+      appendEntries([
+        baseEntry,
+        {
+          type: 'output',
+          text: formattedListing || terminalStrings.emptyDirectory,
+          columns: listingColumns,
+        },
+      ])
     },
     cd: () => {
       const targetPath = resolvePath(cwd, args[0] ?? '/')

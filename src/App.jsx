@@ -4,7 +4,7 @@ import CatPartyLayer from './components/CatPartyLayer'
 import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
 import { CV_FILE_NAME } from './terminal/constants'
-import { formatPrompt, formatSuggestionLabel } from './terminal/formatters'
+import { formatPrompt, formatSuggestionLabel, getTerminalListColumnWidth } from './terminal/formatters'
 import TerminalHistory from './components/terminal/TerminalHistory'
 import { useAppState } from './context/AppStateContext'
 
@@ -42,6 +42,9 @@ function App() {
   } = useAppState()
 
   const catPartyLayer = <CatPartyLayer isActive={isCatPartyActive} sprites={catSprites} />
+  const autocompleteLabels = tabCompletion?.suggestions.map(formatSuggestionLabel) ?? []
+  const autocompleteColumnWidth = getTerminalListColumnWidth(autocompleteLabels)
+  const autocompleteColumnStyle = { '--autocomplete-column-width': `${autocompleteColumnWidth}ch` }
 
   if (isPhoneView) {
     return (
@@ -115,15 +118,22 @@ function App() {
                 </form>
 
                 {tabCompletion && tabCompletion.suggestions.length > 1 ? (
-                  <div className="autocomplete-suggestions" aria-live="polite">
-                    {tabCompletion.suggestions.map((suggestion, index) => (
-                      <span
-                        key={suggestion}
-                        className={`autocomplete-suggestion${index === tabCompletion.index ? ' is-selected' : ''}`}
-                      >
-                        {formatSuggestionLabel(suggestion)}
-                      </span>
-                    ))}
+                  <div className="autocomplete-suggestions" aria-live="polite" style={autocompleteColumnStyle}>
+                    {tabCompletion.suggestions.map((suggestion, index) => {
+                      const label = formatSuggestionLabel(suggestion)
+                      const isSelected = index === tabCompletion.index
+                      const isDirectory = suggestion.endsWith('/')
+
+                      return (
+                        <span key={suggestion} className="autocomplete-suggestion">
+                          <span
+                            className={`autocomplete-suggestion-label${isDirectory ? ' is-directory' : ''}${isSelected ? ' is-selected' : ''}`}
+                          >
+                            {label}
+                          </span>
+                        </span>
+                      )
+                    })}
                   </div>
                 ) : null}
               </TerminalHistory>

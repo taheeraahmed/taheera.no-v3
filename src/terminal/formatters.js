@@ -34,6 +34,27 @@ export const formatSuggestionLabel = (suggestion) => {
   return hasTrailingSlash ? `${baseName}/` : baseName
 }
 
+export const TERMINAL_LIST_COLUMN_PADDING = 4
+export const getTerminalListColumnWidth = (items) => {
+  const widestItem = items.reduce((max, item) => Math.max(max, item.length), 0)
+  return widestItem + TERMINAL_LIST_COLUMN_PADDING
+}
+
+export const formatTerminalListColumns = (items) => {
+  const columnWidth = getTerminalListColumnWidth(items)
+  return items.map((item) => item.padEnd(columnWidth, ' ')).join('')
+}
+
+export const formatTerminalListColumnsWithMeta = (items) => {
+  const labels = items.map((item) => item.label)
+  const columnWidth = getTerminalListColumnWidth(labels)
+
+  return items.map((item) => ({
+    ...item,
+    text: item.label.padEnd(columnWidth, ' '),
+  }))
+}
+
 export const formatLastLogin = (date = new Date()) => {
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

@@ -100,20 +100,31 @@
 }
 
 .autocomplete-suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  display: block;
+  white-space: normal;
+  line-height: 1.5em;
 }
 
 .autocomplete-suggestion {
+  display: inline-block;
+  width: var(--autocomplete-column-width, auto);
+  vertical-align: top;
   padding: 0;
   border: none;
   border-radius: 0;
   color: rgba(255, 233, 246, 0.92);
+}
+
+.autocomplete-suggestion-label {
+  display: inline-block;
   transition: background-color 140ms ease, color 140ms ease;
 }
 
-.autocomplete-suggestion.is-selected {
+.autocomplete-suggestion-label.is-directory {
+  color: #c995ff;
+}
+
+.autocomplete-suggestion-label.is-selected {
   background: rgba(255, 84, 176, 0.35);
   color: #fff8fd;
 }
@@ -122,9 +133,5 @@
   .terminal-screen {
     padding: 0.85rem;
     font-size: 0.86rem;
-  }
-
-  .autocomplete-suggestions {
-    gap: 0.3rem;
   }
 }

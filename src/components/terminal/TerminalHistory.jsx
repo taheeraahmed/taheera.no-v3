@@ -109,6 +109,21 @@ function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
           )
         }
 
+        if (entry.type === 'output' && Array.isArray(entry.columns)) {
+          return (
+            <p className="line output" key={`${entry.type}-${index}`}>
+              {entry.columns.map((column, columnIndex) => (
+                <span
+                  key={`column-${index}-${columnIndex}`}
+                  className={column.isDirectory ? 'terminal-directory-item' : undefined}
+                >
+                  {column.text}
+                </span>
+              ))}
+            </p>
+          )
+        }
+
         if (entry.type === 'hint') {
           return renderHintEntry(entry.commands, index, onHintClick)
         }

@@ -1,5 +1,5 @@
 import { commandNames, pathCommands } from './constants'
-import { findNode, resolvePath } from './filesystem'
+import { compareDirectoryEntries, findNode, resolvePath } from './filesystem'
 
 const splitParentAndPartial = (rawPath) => {
   if (!rawPath) {
@@ -39,7 +39,7 @@ export const getPathSuggestions = (terminalTree, cwd, rawPath, options = {}) => 
 
       return true
     })
-    .sort(([a], [b]) => a.localeCompare(b))
+    .sort(compareDirectoryEntries)
 
   return candidates.map(([name, node]) => {
     const suffix = node.type === 'dir' ? '/' : name.includes('.') ? '' : '.txt'

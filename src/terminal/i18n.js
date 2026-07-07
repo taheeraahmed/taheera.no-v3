@@ -21,6 +21,38 @@ const localizedContent = {
       email: 'taheera.ahmed@gmail.com',
       imageAlt: 'Portrait placeholder for Taheera',
     },
+    proudOf: {
+      graduation_speech: {
+        text: 'TODO',
+        image: '/graduation.jpg',
+        imageAlt: 'Taheera holder tale på sin egen avgangsseremoni',
+      },
+      first_job: {
+        text: 'TODO',
+        image: '/firstjob.jpg',
+        imageAlt: 'Taheera på sin første dag i sin første jobb',
+      },
+      graduation: {
+        text: 'TODO',
+        image: '/graduation.jpg',
+        imageAlt: 'Taheera på sin egen avgangsseremoni',
+      },
+      getting_all_my_internships: {
+        text: 'TODO',
+        image: '/internships.jpg',
+        imageAlt: 'Taheera på sin første dag i sin første internship',
+      },
+      finishing_my_first_half_marathon: {
+        text: 'TODO',
+        image: '/running.jpg',
+        imageAlt: 'Taheera i mål på sitt første halvmaraton',
+      },
+      women_in_tech: {
+        text: 'TODO',
+        image: '/womenintech.jpg',
+        imageAlt: 'Taheera på Women in Tech-konferansen i Oslo',
+      },
+    },
     aboutMe: {
       running: {
         text: "I hated running in 2024, but I was group-pressured into signing up for a half marathon (it was in Italy, so I thought why not?). I finished it, but used SO much time, it was humbling. This is what has fueled my running motivation :) I've ran three half-marathons since, and I'm still running. Hopefully I will manage to run a half-marathon in under two hours? We will see.",
@@ -77,6 +109,38 @@ const localizedContent = {
       location: 'Oslo, Norge',
       email: 'taheera.ahmed@gmail.com',
       imageAlt: 'Portrett av Taheera',
+    },
+    proudOf: {
+      graduation_speech: {
+        text: 'TODO',
+        image: '/graduation.jpg',
+        imageAlt: 'Taheera holder tale på sin egen avgangsseremoni',
+      },
+      first_job: {
+        text: 'TODO',
+        image: '/firstjob.jpg',
+        imageAlt: 'Taheera på sin første dag i sin første jobb',
+      },
+      graduation: {
+        text: 'TODO',
+        image: '/graduation.jpg',
+        imageAlt: 'Taheera på sin egen avgangsseremoni',
+      },
+      getting_all_my_internships: {
+        text: 'TODO',
+        image: '/internships.jpg',
+        imageAlt: 'Taheera på sin første dag i sin første internship',
+      },
+      finishing_my_first_half_marathon: {
+        text: 'TODO',
+        image: '/running.jpg',
+        imageAlt: 'Taheera i mål på sitt første halvmaraton',
+      },
+      women_in_tech: {
+        text: 'TODO',
+        image: '/womenintech.jpg',
+        imageAlt: 'Taheera på Women in Tech-konferansen i Oslo',
+      },
     },
     aboutMe: {
       running: {

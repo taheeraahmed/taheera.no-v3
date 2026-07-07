@@ -24,6 +24,7 @@ export const getContentSnapshot = (moduleContent) => ({
     ...(moduleContent.rootFiles ?? {}),
   },
   aboutMe: moduleContent.aboutMe,
+  proudOf: moduleContent.proudOf,
   contactCard: moduleContent.contactCard,
   welcomeLines: moduleContent.welcomeLines,
 })
@@ -31,10 +32,19 @@ export const getContentSnapshot = (moduleContent) => ({
 const objectToFiles = (entries) =>
   Object.fromEntries(Object.entries(entries).map(([key, value]) => [key, makeFile(value)]))
 
+export const compareDirectoryEntries = ([aName, aNode], [bName, bNode]) => {
+  if (aNode.type !== bNode.type) {
+    return aNode.type === 'dir' ? -1 : 1
+  }
+
+  return aName.localeCompare(bName)
+}
+
 export const buildTerminalTree = (content) =>
   makeDirectory({
     ...objectToFiles(content.rootFiles),
     'about-me': makeDirectory(objectToFiles(content.aboutMe)),
+    'things-im-proud-of': makeDirectory(objectToFiles(content.proudOf)),
   })
 
 const splitPath = (path) => path.split('/').filter(Boolean)

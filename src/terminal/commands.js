@@ -157,7 +157,13 @@ export const runCommand = ({
         return
       }
 
-      const targetPath = resolvePath(cwd, args[0].replace(/\.txt$/, ''))
+      const rawTarget = args[0]
+      if (!rawTarget.endsWith('.txt')) {
+        appendErrorEntry(appendEntries, baseEntry, terminalStrings.catNoSuchFile(rawTarget))
+        return
+      }
+
+      const targetPath = resolvePath(cwd, rawTarget.slice(0, -4))
       const node = findNode(terminalTree, targetPath)
 
       if (!node) {

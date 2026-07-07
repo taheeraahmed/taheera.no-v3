@@ -113,6 +113,21 @@ function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
           return renderHintEntry(entry.commands, index, onHintClick)
         }
 
+        if (entry.type === 'chat') {
+          return (
+            <p className={`line output chat-output${entry.loading ? ' chat-loading' : ''}`} key={`chat-${entry.id ?? index}`}>
+              {entry.loading && !entry.text ? (
+                <span className="chat-spinner" aria-label="Loading">&#9646;</span>
+              ) : (
+                <>
+                  {entry.text}
+                  {entry.loading ? <span className="chat-cursor" aria-hidden="true">&#9646;</span> : null}
+                </>
+              )}
+            </p>
+          )
+        }
+
         return (
           <p className={`line ${entry.type}`} key={`${entry.type}-${index}`}>
             {renderTextWithMarkdownLinks(entry.text)}

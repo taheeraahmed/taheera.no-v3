@@ -228,6 +228,7 @@ const terminalMessages = {
       '  bash <file>       Run a shell script',
       '  lang <code>       Switch language (en/no)',
       '  clear             Clear terminal output',
+      '  chat <message>    Chat with an AI (runs in browser)',
     ].join('\n'),
   },
   no: {
@@ -269,6 +270,7 @@ const terminalMessages = {
       '  bash <file>       Kjør et shell-script',
       '  lang <code>       Bytt språk (en/no)',
       '  clear             Tøm terminalutskriften',
+      '  chat <melding>    Chat med en AI (kjøres i nettleseren)',
     ].join('\n'),
   },
 }

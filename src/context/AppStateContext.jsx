@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import useDraggableWindow from '../hooks/useDraggableWindow'
 import usePortfolioWindows from '../hooks/usePortfolioWindows'
 import useCatParty from '../hooks/useCatParty'
+import { useWebLLM } from '../hooks/useWebLLM'
 import { getSubmitUpdate, getTabCompletionUpdate } from '../terminal/autocomplete'
 import { runCommand } from '../terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from '../terminal/filesystem'
@@ -47,6 +48,7 @@ export function AppStateProvider({ children }) {
   const { offset: windowOffset, isDragging: isDraggingWindow, handleDragStart: handleWindowDragStart } =
     useDraggableWindow()
   const { isCatPartyActive, catSprites, activateCatParty, toggleCatParty } = useCatParty()
+  const { initEngine, chat, isReady: webllmReady } = useWebLLM()
 
   const historyEndRef = useRef(null)
   const inputRef = useRef(null)
@@ -91,7 +93,49 @@ export function AppStateProvider({ children }) {
     setHistory((prev) => [...prev, ...entries])
   }
 
+  const handleChatCommand = async (prompt, baseEntry) => {
+    if (!prompt.trim()) {
+      appendEntries([baseEntry, { type: 'error', text: 'Usage: chat <message>' }])
+      return
+    }
+
+    const entryId = `chat-${Date.now()}`
+
+    const updateEntry = (text, loading) => {
+      setHistory((prev) => prev.map((e) => (e.id === entryId ? { ...e, text, loading } : e)))
+    }
+
+    try {
+      if (!webllmReady) {
+        appendEntries([
+          baseEntry,
+          { type: 'chat', text: 'Loading AI model for the first time — this may take a minute...', loading: true, id: entryId },
+        ])
+        await initEngine((progress) => updateEntry(progress, true))
+        updateEntry('', true)
+      } else {
+        appendEntries([baseEntry, { type: 'chat', text: '', loading: true, id: entryId }])
+      }
+
+      await chat(prompt.trim(), (text) => updateEntry(text, true))
+      setHistory((prev) => prev.map((e) => (e.id === entryId ? { ...e, loading: false } : e)))
+    } catch (err) {
+      updateEntry(`Error: ${err.message}`, false)
+    }
+  }
+
   const handleRunCommand = (rawInput) => {
+    const trimmed = rawInput.trim()
+    const spaceIndex = trimmed.indexOf(' ')
+    const command = spaceIndex >= 0 ? trimmed.slice(0, spaceIndex) : trimmed
+
+    if (command === 'chat') {
+      const prompt = spaceIndex >= 0 ? trimmed.slice(spaceIndex + 1) : ''
+      const baseEntry = { type: 'command', command: trimmed, cwd }
+      handleChatCommand(prompt, baseEntry)
+      return
+    }
+
     runCommand({
       rawInput,
       language,

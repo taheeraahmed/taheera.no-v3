@@ -13,6 +13,7 @@ export const commandNames = [
   './card.sh',
   'lang',
   'language',
+  'chat',
 ]
 
 export const pathCommands = ['cd', 'ls', 'cat', 'open', 'bash']

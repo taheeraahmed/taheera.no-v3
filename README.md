@@ -1,16 +1,42 @@
-# React + Vite
+# taheera.no-vol-3
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interactive portfolio website built with React and Vite.
 
-Currently, two official plugins are available:
+The UI mimics a terminal while still using browser-native interactions like draggable windows, keyboard navigation, localized content, and rich media output.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Terminal-like command interface (`help`, `ls`, `cd`, `cat`, `open`, `lang`, `clear`)
+- Localized content and shell messaging (`en`, `no`)
+- Draggable terminal and CV window
+- Flip-to-card interaction and mobile contact-card layout
+- Cat easter egg mode with animated sprites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Project Structure
 
-## Expanding the ESLint configuration
+- `src/App.jsx`: Main app composition and interaction flow
+- `src/components`: UI building blocks (terminal window, CV dialog, contact card)
+- `src/hooks`: Window drag, window state, and cat party behavior
+- `src/terminal`: Terminal command execution, formatting, virtual filesystem, i18n, autocomplete
+- `src/content.js`: Portfolio data and localized text
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+Install dependencies and start the dev server:
+
+```bash
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Run lint:
+
+```bash
+npm run lint
+```

@@ -25,6 +25,15 @@ export const splitHelpLineParts = (line) => {
   }
 }
 
+export const formatSuggestionLabel = (suggestion) => {
+  const hasTrailingSlash = suggestion.endsWith('/')
+  const normalized = hasTrailingSlash ? suggestion.slice(0, -1) : suggestion
+  const parts = normalized.split('/').filter(Boolean)
+  const baseName = parts[parts.length - 1] ?? suggestion
+
+  return hasTrailingSlash ? `${baseName}/` : baseName
+}
+
 export const formatLastLogin = (date = new Date()) => {
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

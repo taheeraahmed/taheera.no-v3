@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
-import { DEFAULT_LANGUAGE, getLocalizedContent } from './content'
 import ContactCard from './components/ContactCard'
+import CatPartyLayer from './components/CatPartyLayer'
 import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
 import useDraggableWindow from './hooks/useDraggableWindow'
@@ -10,9 +10,9 @@ import { CV_FILE_NAME } from './terminal/constants'
 import { getSubmitUpdate, getTabCompletionUpdate } from './terminal/autocomplete'
 import { runCommand } from './terminal/commands'
 import { buildTerminalTree, getContentSnapshot } from './terminal/filesystem'
-import { createInitialHistory, getWelcomeText, formatPrompt } from './terminal/formatters'
+import { createInitialHistory, getWelcomeText, formatPrompt, formatSuggestionLabel } from './terminal/formatters'
 import TerminalHistory from './components/terminal/TerminalHistory'
-import { getTerminalStrings } from './terminal/i18n'
+import { DEFAULT_LANGUAGE, getLocalizedContent, getTerminalStrings, getUiStrings } from './terminal/i18n'
 import useCatParty from './hooks/useCatParty'
 
 function App() {
@@ -28,10 +28,11 @@ function App() {
     getContentSnapshot(getLocalizedContent(DEFAULT_LANGUAGE))
   )
   const terminalStrings = useMemo(() => getTerminalStrings(language), [language])
+  const uiStrings = useMemo(() => getUiStrings(language), [language])
   const [cwd, setCwd] = useState([])
   const [input, setInput] = useState('')
-  const terminalTree = buildTerminalTree(content)
-  const welcomeText = getWelcomeText(content)
+  const terminalTree = useMemo(() => buildTerminalTree(content), [content])
+  const welcomeText = useMemo(() => getWelcomeText(content), [content])
   const [history, setHistory] = useState(() => createInitialHistory(content, terminalStrings))
   const [commandHistory, setCommandHistory] = useState([])
   const [historyIndex, setHistoryIndex] = useState(null)
@@ -68,7 +69,7 @@ function App() {
       return
     }
 
-    const dispose = import.meta.hot.accept('./content', (newModule) => {
+    const dispose = import.meta.hot.accept('./terminal/i18n', (newModule) => {
       if (!newModule) {
         return
       }
@@ -234,15 +235,6 @@ function App() {
     return target instanceof Element && target.closest('button, a, input, label')
   }
 
-  const formatSuggestionLabel = (suggestion) => {
-    const hasTrailingSlash = suggestion.endsWith('/')
-    const normalized = hasTrailingSlash ? suggestion.slice(0, -1) : suggestion
-    const parts = normalized.split('/').filter(Boolean)
-    const baseName = parts[parts.length - 1] ?? suggestion
-
-    return hasTrailingSlash ? `${baseName}/` : baseName
-  }
-
   const handleWindowMouseDown = (event) => {
     setTerminalActive()
 
@@ -263,30 +255,26 @@ function App() {
     focusInput()
   }
 
+  const handleInputChange = (event) => {
+    setInput(event.target.value)
+    setTabCompletion(null)
+    if (historyIndex !== null) {
+      setHistoryIndex(null)
+    }
+  }
+
+  const catPartyLayer = <CatPartyLayer isActive={isCatPartyActive} sprites={catSprites} />
+
   if (isPhoneView) {
     return (
       <main className="portfolio-page">
-        <div className={`cat-easter-egg ${isCatPartyActive ? 'is-active' : ''}`} aria-hidden="true">
-          {isCatPartyActive
-            ? catSprites.map((cat) => (
-                <img
-                  key={cat.id}
-                  className="cat-easter-egg-sprite"
-                  src={cat.src}
-                  alt=""
-                  style={cat.style}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ))
-            : null}
-        </div>
+        {catPartyLayer}
 
         <section className="terminal-card-face mobile-contact-only" aria-label={terminalStrings.contactCardAria}>
           <div className="terminal-card-screen">
             <ContactCard
               card={content.contactCard}
-              ui={content.ui}
+              ui={uiStrings}
               onClose={() => {}}
               onNameHover={activateCatParty}
               onNameClick={toggleCatParty}
@@ -301,21 +289,7 @@ function App() {
 
   return (
     <main className="portfolio-page">
-      <div className={`cat-easter-egg ${isCatPartyActive ? 'is-active' : ''}`} aria-hidden="true">
-        {isCatPartyActive
-          ? catSprites.map((cat) => (
-              <img
-                key={cat.id}
-                className="cat-easter-egg-sprite"
-                src={cat.src}
-                alt=""
-                style={cat.style}
-                loading="lazy"
-                decoding="async"
-              />
-            ))
-          : null}
-      </div>
+      {catPartyLayer}
 
       <CvDialog
         isOpen={isCvDialogOpen}
@@ -323,7 +297,7 @@ function App() {
         onClose={closeCvDialog}
         isActive={activeWindow === 'cv'}
         onActivate={setCvActive}
-        ui={content.ui}
+        ui={uiStrings}
       />
 
       <section
@@ -341,7 +315,7 @@ function App() {
             onClick={handleWindowClick}
             className="terminal-face terminal-face-front"
             aria-label={terminalStrings.terminalAria}
-            closeLabel={content.ui?.closeButtonAriaLabel ?? 'Close'}
+            closeLabel={uiStrings.closeButtonAriaLabel}
           >
             <div className="terminal-screen">
               <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick}>
@@ -366,13 +340,7 @@ function App() {
                     id="command-input"
                     ref={inputRef}
                     value={input}
-                    onChange={(event) => {
-                      setInput(event.target.value)
-                      setTabCompletion(null)
-                      if (historyIndex !== null) {
-                        setHistoryIndex(null)
-                      }
-                    }}
+                    onChange={handleInputChange}
                     onKeyDown={handleInputKeyDown}
                     autoComplete="off"
                     spellCheck="false"
@@ -388,7 +356,7 @@ function App() {
             <div className="terminal-card-screen">
               <ContactCard
                 card={content.contactCard}
-                ui={content.ui}
+                ui={uiStrings}
                 onClose={hideCard}
                 onNameHover={activateCatParty}
                 onNameClick={toggleCatParty}

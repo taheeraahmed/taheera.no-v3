@@ -71,7 +71,6 @@ function useDraggableWindow({ getBounds } = {}) {
 
   return {
     offset,
-    setOffset,
     isDragging,
     handleDragStart,
     resetOffset,

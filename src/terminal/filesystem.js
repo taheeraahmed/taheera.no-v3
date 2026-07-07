@@ -26,7 +26,6 @@ export const getContentSnapshot = (moduleContent) => ({
   aboutMe: moduleContent.aboutMe,
   contactCard: moduleContent.contactCard,
   welcomeLines: moduleContent.welcomeLines,
-  ui: moduleContent.ui ?? {},
 })
 
 const objectToFiles = (entries) =>
@@ -77,5 +76,3 @@ export const findNode = (terminalTree, segments) => {
 }
 
 export const formatFileName = (name) => (name.includes('.') ? name : `${name}.txt`)
-
-export const normalizeCardScriptPath = (path) => path.replace(/^[.][/]/, '')

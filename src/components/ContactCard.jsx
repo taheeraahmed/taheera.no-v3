@@ -1,44 +1,7 @@
-import { Email, GitHub, LinkedIn } from '@mui/icons-material'
-import { FaTiktok } from 'react-icons/fa'
 import './terminal/TerminalShared.css'
 import HintActionButton from './HintActionButton'
+import { defaultCardLabels, defaultSocialTitles, fieldRows, socialLinks } from './contactCardConfig'
 import './ContactCard.css'
-
-const fieldRows = [
-  { labelKey: 'role', key: 'title' },
-  { labelKey: 'organization', key: 'organization' },
-  { labelKey: 'website', key: 'website', link: true },
-  { labelKey: 'location', key: 'location' },
-  { labelKey: 'email', key: 'email' },
-]
-
-const socialLinks = [
-  {
-    label: 'LinkedIn',
-    key: 'linkedin',
-    icon: LinkedIn,
-    titleKey: 'linkedin',
-  },
-  {
-    label: 'GitHub',
-    key: 'github',
-    icon: GitHub,
-    titleKey: 'github',
-  },
-  {
-    label: 'Email',
-    key: 'email',
-    icon: Email,
-    titleKey: 'email',
-    isMailto: true,
-  },
-  {
-    label: 'TikTok',
-    key: 'tiktok',
-    icon: FaTiktok,
-    titleKey: 'tiktok',
-  },
-]
 
 const toExternalHref = (value) =>
   value.startsWith('http://') || value.startsWith('https://') ? value : `https://${value}`
@@ -52,19 +15,8 @@ const toSocialHref = (link, card) => {
 }
 
 function ContactCard({ card, ui, onClose, onNameHover, onNameClick, isCatPartyActive, isPhoneView = false }) {
-  const cardLabels = ui?.contactCardLabels ?? {
-    role: 'Role',
-    organization: 'Organization',
-    website: 'Website',
-    location: 'Location',
-    email: 'Email',
-  }
-  const socialTitles = ui?.socialTitles ?? {
-    linkedin: 'LinkedIn profile',
-    github: 'GitHub profile',
-    email: 'Send an email',
-    tiktok: 'TikTok profile',
-  }
+  const cardLabels = ui?.contactCardLabels ?? defaultCardLabels
+  const socialTitles = ui?.socialTitles ?? defaultSocialTitles
 
   return (
     <article className="terminal-contact-card" aria-label={ui?.contactCardAriaLabel ?? 'Contact card'}>

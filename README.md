@@ -1,24 +1,11 @@
 # taheera.no-vol-3
 
-Interactive portfolio website built with React and Vite.
+Version 3 of my portfolio page!! I have used React and Vite.
 
-The UI mimics a terminal while still using browser-native interactions like draggable windows, keyboard navigation, localized content, and rich media output.
+The "terminal" is a portfolio page with the ability to drag windows, smooooth keyboard navigation and "rich media output" (mainly photos).
+So basically a terminal++ but also a terminal--. Meaning, it looks like a terminal, but lacks a lot of functionality, but on the other hand have some extra features added.
 
-## Features
-
-- Terminal-like command interface (`help`, `ls`, `cd`, `cat`, `open`, `lang`, `clear`)
-- Localized content and shell messaging (`en`, `no`)
-- Draggable terminal and CV window
-- Flip-to-card interaction and mobile contact-card layout
-- Cat easter egg mode with animated sprites
-
-## Project Structure
-
-- `src/App.jsx`: Main app composition and interaction flow
-- `src/components`: UI building blocks (terminal window, CV dialog, contact card)
-- `src/hooks`: Window drag, window state, and cat party behavior
-- `src/terminal`: Terminal command execution, formatting, virtual filesystem, i18n, autocomplete
-- `src/content.js`: Portfolio data and localized text
+![this is what it looks like](screenshot.png)
 
 ## Development
 

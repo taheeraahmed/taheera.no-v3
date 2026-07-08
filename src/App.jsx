@@ -104,9 +104,10 @@ function App() {
                   <label htmlFor="command-input" className="prompt">
                     {formatPrompt(cwd)}
                   </label>
-                  <input
+                  <textarea
                     id="command-input"
                     ref={inputRef}
+                    rows={1}
                     value={input}
                     onChange={handleInputChange}
                     onKeyDown={handleInputKeyDown}

@@ -93,6 +93,30 @@ export function AppStateProvider({ children }) {
     setHistory((prev) => [...prev, ...entries])
   }
 
+  const resetInputNavigationState = () => {
+    setHistoryIndex(null)
+    setDraftInput('')
+    setTabCompletion(null)
+  }
+
+  const executeInput = () => {
+    const submitUpdate = getSubmitUpdate({ line: input, cwd, terminalTree })
+    if (!submitUpdate.shouldExecute) {
+      setInput(submitUpdate.nextInput)
+      setTabCompletion(null)
+      return
+    }
+
+    const commandLine = input.trim()
+    if (commandLine) {
+      setCommandHistory((prev) => [...prev, commandLine])
+    }
+
+    resetInputNavigationState()
+    handleRunCommand(input)
+    setInput('')
+  }
+
   const handleChatCommand = async (prompt, baseEntry) => {
     if (!prompt.trim()) {
       appendEntries([baseEntry, { type: 'error', text: 'Usage: chat <message>' }])
@@ -161,28 +185,46 @@ export function AppStateProvider({ children }) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
-    const submitUpdate = getSubmitUpdate({ line: input, cwd, terminalTree })
-    if (!submitUpdate.shouldExecute) {
-      setInput(submitUpdate.nextInput)
-      setTabCompletion(null)
-      return
-    }
-
-    const commandLine = input.trim()
-    if (commandLine) {
-      setCommandHistory((prev) => [...prev, commandLine])
-    }
-
-    setHistoryIndex(null)
-    setDraftInput('')
-    setTabCompletion(null)
-    handleRunCommand(input)
-    setInput('')
+    executeInput()
   }
 
   const handleInputKeyDown = (event) => {
+    const isCtrlOnly = event.ctrlKey && !event.metaKey && !event.altKey
+
+    if (isCtrlOnly && event.key.toLowerCase() === 'l') {
+      event.preventDefault()
+      hideCard()
+      setHistory([])
+      setInput('')
+      resetInputNavigationState()
+      return
+    }
+
+    if (isCtrlOnly && event.key.toLowerCase() === 'c') {
+      event.preventDefault()
+      appendEntries([
+        { type: 'command', command: input, cwd },
+        { type: 'output', text: '^C' },
+      ])
+      setInput('')
+      resetInputNavigationState()
+      return
+    }
+
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      executeInput()
+      return
+    }
+
     if (event.key === 'ArrowUp') {
+      const cursor = event.currentTarget.selectionStart
+      const hasNewlineBeforeCursor = input.slice(0, cursor).includes('\n')
+
+      if (hasNewlineBeforeCursor) {
+        return
+      }
+
       if (commandHistory.length === 0) {
         return
       }
@@ -205,6 +247,13 @@ export function AppStateProvider({ children }) {
     }
 
     if (event.key === 'ArrowDown') {
+      const cursor = event.currentTarget.selectionEnd
+      const hasNewlineAfterCursor = input.slice(cursor).includes('\n')
+
+      if (hasNewlineAfterCursor) {
+        return
+      }
+
       if (historyIndex === null) {
         return
       }
@@ -251,6 +300,8 @@ export function AppStateProvider({ children }) {
 
   useEffect(() => {
     if (inputRef.current) {
+      inputRef.current.style.height = 'auto'
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`
       const end = inputRef.current.value.length
       inputRef.current.setSelectionRange(end, end)
     }

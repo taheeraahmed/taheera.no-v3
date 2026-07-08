@@ -29,7 +29,7 @@ export const proudOfMedia = {
     imageAlt: 'Taheera på sin egen avgangsseremoni',
   },
   my_internships: {
-    ...fromDir('/proud_of/internships', 'internships-1.jpeg', 'internships-2.png', 'internships-3.JPEG'),
+    ...fromDir('/proud_of/internships', 'internships-1.JPEG', 'internships-2.png', 'internships-3.JPEG'),
     imageAlt: 'Taheera på sin første dag i sin første internship',
   },
   first_half_marathon: {

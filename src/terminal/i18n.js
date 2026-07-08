@@ -59,10 +59,11 @@ Eventually I decided to take matters into my own hands, step out of my comfort z
 
 Luckily I got the role, and that is where I learned all the basics. Everything from the difference between git and GitHub to development in general and, haha, what a backend actually was. I remember that being a huge mystery to me.
 
-After that role, things started snowballing. I got my first part-time developer job at Dreamknit in 2021, and eventually landed my first summer internship at Netlight in 2022!! The rest is in my CV ;);)`,
+After that role, things started snowballing. I got my first part-time developer job at Dreamknit in 2021, and eventually landed my first summer internship at Netlight in 2022!! After this a had so much confidence, so I applied for everything I wanted to do, and ended up with two different internships, two part-time jobs and one research assistant job (not at the same time hehe). The rest is in my CV ;);)`,
         image: '/proud_of/internships/internships-1.JPEG',
         images: ['/proud_of/internships/internships-1.JPEG', '/proud_of/internships/internships-2.png'],
         imageAlt: 'Taheera på sin første dag i sin første internship',
+  hintCommands: [`open ${CV_FILE_NAME}`],
       },
       first_half_marathon: {
         text: `It is honestly kind of wild that I even started running at all. From the day I was born until 2024, I hated running with my whole heart. The only thing I wanted to do was strength training.
@@ -185,10 +186,11 @@ Til slutt bestemte jeg meg for å ta saken i egne hender, gå ut av komfortsonen
 
 Heldigvis fikk jeg vervet, og det var der jeg lærte alt det grunnleggende. Alt fra forskjellen på git og GitHub til utvikling generelt og haha hva en backend faktisk var. Jeg husker at det var et stort mysterium for meg.
 
-Etter dette vervet begynte snøballen å rulle. Jeg fikk min første deltidsjobb som utvikler i Dreamknit i 2021, og landet til slutt min første sommerjobb i Netlight i 2022!! Resten kan sees i CV-en min ;);)`,
+Etter dette vervet begynte snøballen å rulle. Jeg fikk min første deltidsjobb som utvikler i Dreamknit i 2021, og landet til slutt min første sommerjobb i Netlight i 2022!! Etter alt dette hadde jeg en høyere selvtillit og tro på meg selv, og søkte på alle jobbene jeg ville ha!!! Før endt studie hadde jeg hatt to relevante summer-internships, to relevante deltidsjobber, en forskningsassistentjobb (alle jobbene var ikke samtidig hehe). Disse er beskrevet nærmere i CV-en min ;);)`,
         image: '/proud_of/internships/internships-1.JPEG',
         images: ['/proud_of/internships/internships-1.JPEG', '/proud_of/internships/internships-2.png'],
         imageAlt: 'Taheera på sin første dag i sin første internship',
+  hintCommands: [`open ${CV_FILE_NAME}`],
       },
       first_half_marathon: {
         text: `Det er faktisk helt vilt at jeg i det hele tatt begynte å løpe. Fra dagen jeg ble født og frem til 2024 hatet jeg løping av hele mitt hjerte. Det eneste jeg ville holde på med var styrketrening.

@@ -176,7 +176,7 @@ export const runCommand = ({
         return
       }
 
-      appendEntries([
+      const catEntries = [
         baseEntry,
         {
           type: 'output',
@@ -185,7 +185,13 @@ export const runCommand = ({
           images: node.images,
           imageAlt: node.imageAlt,
         },
-      ])
+      ]
+
+      if (Array.isArray(node.hintCommands) && node.hintCommands.length > 0) {
+        catEntries.push({ type: 'hint', commands: node.hintCommands })
+      }
+
+      appendEntries(catEntries)
     },
     open: () => {
       if (!args[0]) {

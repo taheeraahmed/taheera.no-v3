@@ -13,6 +13,7 @@ const makeFile = (value) => {
       image: value.image,
       images: Array.isArray(value.images) ? value.images : undefined,
       imageAlt: value.imageAlt,
+      hintCommands: Array.isArray(value.hintCommands) ? value.hintCommands : undefined,
     }
   }
 

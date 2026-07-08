@@ -93,6 +93,8 @@
 
 .terminal-stage.is-flipped .terminal-face-front {
   pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear 780ms;
 }
 
 .terminal-stage.is-flipped .terminal-face-back {

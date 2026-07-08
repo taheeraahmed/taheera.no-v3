@@ -170,7 +170,7 @@ function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
           return (
             <div className="line output rich-output" key={`${entry.type}-${index}`}>
               <RichOutputMediaStack images={entryImages} imageAlt={entry.imageAlt} />
-              <p className="rich-output-text">{entry.text}</p>
+              <p className="rich-output-text">{renderTextWithMarkdownLinks(entry.text)}</p>
             </div>
           )
         }

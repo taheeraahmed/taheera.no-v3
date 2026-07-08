@@ -12,7 +12,9 @@
   background:
     linear-gradient(135deg, rgba(255, 155, 205, 0.16), rgba(255, 204, 229, 0.06)),
     rgba(49, 23, 44, 0.9);
-  transform-origin: center top;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  perspective: 1000px;
   animation: terminal-flip-in 650ms cubic-bezier(0.17, 0.83, 0.32, 1.1);
   box-shadow: none;
 }

@@ -89,15 +89,15 @@ function App() {
         }}
       >
         <div className="terminal-flipper">
-          <TerminalWindow
-            title={terminalStrings.windowTitle}
-            onDragStart={handleWindowDragStart}
-            onMouseDown={handleWindowMouseDown}
-            onClick={handleWindowClick}
-            className="terminal-face terminal-face-front"
-            aria-label={terminalStrings.terminalAria}
-            closeLabel={uiStrings.closeButtonAriaLabel}
-          >
+          <div className="terminal-face terminal-face-front">
+            <TerminalWindow
+              title={terminalStrings.windowTitle}
+              onDragStart={handleWindowDragStart}
+              onMouseDown={handleWindowMouseDown}
+              onClick={handleWindowClick}
+              aria-label={terminalStrings.terminalAria}
+              closeLabel={uiStrings.closeButtonAriaLabel}
+            >
             <div className="terminal-screen">
               <TerminalHistory history={history} historyEndRef={historyEndRef} onHintClick={handleHintClick}>
                 <form className="command-form" onSubmit={handleSubmit}>
@@ -140,6 +140,7 @@ function App() {
               </TerminalHistory>
             </div>
           </TerminalWindow>
+          </div>
 
           <section className="terminal-face terminal-face-back terminal-card-face" aria-label={terminalStrings.contactCardAria}>
             <div className="terminal-card-screen">

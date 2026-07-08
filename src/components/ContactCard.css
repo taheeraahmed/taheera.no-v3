@@ -61,6 +61,8 @@
   border: 0;
   margin: 0;
   padding: 0;
+  display: inline-block;
+  position: relative;
   background: transparent;
   color: inherit;
   font: inherit;
@@ -69,16 +71,18 @@
   cursor: pointer;
   text-align: left;
   text-shadow: 0 0 0 transparent;
-  transition: color 160ms ease, text-shadow 160ms ease;
-  animation: card-name-glitch 3000ms steps(1, end) infinite;
+  transition: color 120ms ease, text-shadow 120ms ease;
+  animation:
+    card-name-glitch 2600ms steps(1, end) infinite,
+    card-name-glitch-flicker 3900ms steps(1, end) infinite;
 }
 
 .card-name-trigger:hover,
 .card-name-trigger:focus-visible,
 .card-name-trigger.is-active {
   color: #ffe5f7;
-  text-shadow: 0 0 14px rgba(255, 148, 211, 0.58);
-  animation-duration: 2200ms;
+  text-shadow: 0 0 14px rgba(255, 148, 211, 0.6);
+  animation-duration: 2000ms, 3000ms;
 }
 
 .card-name-trigger:focus-visible {
@@ -224,25 +228,118 @@
 
 @keyframes card-name-glitch {
   0%,
-  75%,
+  7%,
+  18%,
+  33%,
+  52%,
+  71%,
+  86%,
   100% {
     transform: translate(0, 0);
     text-shadow: 0 0 0 transparent;
   }
 
-  76% {
-    transform: translate(-0.5px, 0.1px) skewX(-3deg);
-    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.7), 1px 0 0 rgba(255, 115, 194, 0.75);
+  8% {
+    transform: translate(-0.7px, -0.1px) skewX(-6deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.82), 1px 0 0 rgba(255, 115, 194, 0.84);
   }
 
-  77% {
-    transform: translate(0.5px, -0.1px) skewX(3deg);
-    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.7), -1px 0 0 rgba(255, 115, 194, 0.75);
+  9% {
+    transform: translate(0.9px, 0.1px) skewX(6deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.84), -1px 0 0 rgba(255, 115, 194, 0.82);
   }
 
-  78% {
-    transform: translate(0, 0);
-    text-shadow: 0 0 0 transparent;
+  10% {
+    transform: translate(-0.45px, 0.2px) skewX(-4deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.75), 1px 0 0 rgba(255, 115, 194, 0.76);
+  }
+
+  34% {
+    transform: translate(0.5px, -0.4px) skewX(5deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.78), -1px 0 0 rgba(255, 115, 194, 0.76);
+  }
+
+  35% {
+    transform: translate(-0.8px, 0.3px) skewX(-6deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.84), 1px 0 0 rgba(255, 115, 194, 0.82);
+  }
+
+  36% {
+    transform: translate(0.3px, -0.1px) skewX(2deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.72), -1px 0 0 rgba(255, 115, 194, 0.74);
+  }
+
+  53% {
+    transform: translate(-0.65px, 0.08px) skewX(-5deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.8), 1px 0 0 rgba(255, 115, 194, 0.8);
+  }
+
+  54% {
+    transform: translate(0.6px, -0.2px) skewX(5deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.78), -1px 0 0 rgba(255, 115, 194, 0.82);
+  }
+
+  72% {
+    transform: translate(-0.55px, 0.1px) skewX(-3deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.72), 1px 0 0 rgba(255, 115, 194, 0.74);
+  }
+
+  73% {
+    transform: translate(0.7px, -0.2px) skewX(4deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.78), -1px 0 0 rgba(255, 115, 194, 0.8);
+  }
+
+  87% {
+    transform: translate(-0.8px, -0.1px) skewX(-6deg);
+    text-shadow: -1px 0 0 rgba(96, 255, 229, 0.84), 1px 0 0 rgba(255, 115, 194, 0.84);
+  }
+
+  88% {
+    transform: translate(0.7px, 0.12px) skewX(5deg);
+    text-shadow: 1px 0 0 rgba(96, 255, 229, 0.8), -1px 0 0 rgba(255, 115, 194, 0.8);
+  }
+}
+
+@keyframes card-name-glitch-flicker {
+  0%,
+  14%,
+  22%,
+  47%,
+  60%,
+  79%,
+  100% {
+    opacity: 1;
+    filter: none;
+  }
+
+  15% {
+    opacity: 0.96;
+    filter: contrast(1.08) saturate(1.1);
+  }
+
+  16% {
+    opacity: 0.98;
+    filter: none;
+  }
+
+  48% {
+    opacity: 0.97;
+    filter: contrast(1.06) saturate(1.08);
+  }
+
+  49% {
+    opacity: 1;
+    filter: none;
+  }
+
+  80% {
+    opacity: 0.96;
+    filter: contrast(1.07) saturate(1.1);
+  }
+
+  81% {
+    opacity: 1;
+    filter: none;
   }
 }
 

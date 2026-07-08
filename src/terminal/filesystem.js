@@ -1,4 +1,5 @@
 import { CV_FILE_NAME } from './constants'
+import { aboutMeMedia, proudOfMedia } from './mediaConfig'
 
 const makeDirectory = (children) => ({ type: 'dir', children })
 const makeFile = (value) => {
@@ -31,8 +32,10 @@ export const getContentSnapshot = (moduleContent) => ({
   welcomeLines: moduleContent.welcomeLines,
 })
 
-const objectToFiles = (entries) =>
-  Object.fromEntries(Object.entries(entries).map(([key, value]) => [key, makeFile(value)]))
+const objectToFiles = (entries, mediaConfig = {}) =>
+  Object.fromEntries(
+    Object.entries(entries).map(([key, value]) => [key, makeFile({ ...value, ...mediaConfig[key] })])
+  )
 
 export const compareDirectoryEntries = ([aName, aNode], [bName, bNode]) => {
   if (aNode.type !== bNode.type) {
@@ -45,8 +48,8 @@ export const compareDirectoryEntries = ([aName, aNode], [bName, bNode]) => {
 export const buildTerminalTree = (content) =>
   makeDirectory({
     ...objectToFiles(content.rootFiles),
-    'about-me': makeDirectory(objectToFiles(content.aboutMe)),
-    'things-im-proud-of': makeDirectory(objectToFiles(content.proudOf)),
+    'about-me': makeDirectory(objectToFiles(content.aboutMe, aboutMeMedia)),
+    'things-im-proud-of': makeDirectory(objectToFiles(content.proudOf, proudOfMedia)),
   })
 
 const splitPath = (path) => path.split('/').filter(Boolean)

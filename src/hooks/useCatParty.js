@@ -128,17 +128,30 @@ function useCatParty() {
     })
   }, [spawnCats])
 
+  const deactivateCatParty = useCallback(() => {
+    clearSpawnTimeouts()
+    stopCatMotion()
+    pointerRef.current = { x: 50, y: 50, hasPointer: false }
+    setCatSprites([])
+    setIsCatPartyActive(false)
+  }, [clearSpawnTimeouts, stopCatMotion])
+
   const toggleCatParty = useCallback(() => {
     setIsCatPartyActive((prev) => {
       const next = !prev
 
       if (next) {
         spawnCats()
+      } else {
+        clearSpawnTimeouts()
+        stopCatMotion()
+        pointerRef.current = { x: 50, y: 50, hasPointer: false }
+        setCatSprites([])
       }
 
       return next
     })
-  }, [spawnCats])
+  }, [clearSpawnTimeouts, spawnCats, stopCatMotion])
 
   useEffect(() => {
     return () => {
@@ -190,6 +203,7 @@ function useCatParty() {
     isCatPartyActive,
     catSprites,
     activateCatParty,
+    deactivateCatParty,
     toggleCatParty,
   }
 }

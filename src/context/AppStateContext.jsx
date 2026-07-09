@@ -47,7 +47,7 @@ export function AppStateProvider({ children }) {
   } = usePortfolioWindows()
   const { offset: windowOffset, isDragging: isDraggingWindow, handleDragStart: handleWindowDragStart } =
     useDraggableWindow()
-  const { isCatPartyActive, catSprites, activateCatParty, toggleCatParty } = useCatParty()
+  const { isCatPartyActive, catSprites, activateCatParty, deactivateCatParty, toggleCatParty } = useCatParty()
   const { initEngine, chat, isReady: webllmReady } = useWebLLM()
 
   const historyEndRef = useRef(null)
@@ -171,6 +171,9 @@ export function AppStateProvider({ children }) {
       setCwd,
       setLanguage,
       setHistory,
+      activateCatParty,
+      deactivateCatParty,
+      isCatPartyActive,
       hideCard,
       openCvDialog,
       showCard,
@@ -368,6 +371,7 @@ export function AppStateProvider({ children }) {
     closeCvDialog,
     content,
     cwd,
+    deactivateCatParty,
     handleHintClick,
     handleInputChange,
     handleInputKeyDown,

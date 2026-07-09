@@ -22,6 +22,9 @@ export const runCommand = ({
   setCwd,
   setLanguage,
   setHistory,
+  activateCatParty,
+  deactivateCatParty,
+  isCatPartyActive,
   hideCard,
   openCvDialog,
   showCard,
@@ -85,6 +88,50 @@ export const runCommand = ({
     appendEntries([baseEntry])
     showCard()
     inputRef.current?.blur()
+  }
+
+  const runCatsCommand = () => {
+    const action = args[0]?.toLowerCase()
+
+    if (!action) {
+      if (isCatPartyActive) {
+        deactivateCatParty()
+        appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsDeactivated)
+        return
+      }
+
+      activateCatParty()
+      appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsActivated)
+      return
+    }
+
+    if (action === 'activate') {
+      if (isCatPartyActive) {
+        appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsAlreadyActive)
+        return
+      }
+
+      activateCatParty()
+      appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsActivated)
+      return
+    }
+
+    if (action === 'deactivate') {
+      if (!isCatPartyActive) {
+        appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsAlreadyInactive)
+        return
+      }
+
+      deactivateCatParty()
+      appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsDeactivated)
+      return
+    }
+
+    appendErrorEntry(
+      appendEntries,
+      baseEntry,
+      `${terminalStrings.catsUnknownAction(action)}\n${terminalStrings.catsUsage}`,
+    )
   }
 
   const commandHandlers = {
@@ -216,6 +263,7 @@ export const runCommand = ({
       openCvDialog()
       appendOutputEntry(appendEntries, baseEntry, terminalStrings.openingCv)
     },
+    cats: runCatsCommand,
     lang: runLanguageCommand,
     language: runLanguageCommand,
     './card.sh': () => {

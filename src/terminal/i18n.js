@@ -65,9 +65,9 @@ And I am actually still running!!`,
       women_in_tech: {
         text: `During my years as a student, I cared a lot about getting more girls and women to choose technology-related studies.
 
-- I joined the nationwide Jenter og Teknologi tour, where I, together with other role models, gave talks for girls in middle school. We visited more than 20 schools, cultural centers, cinemas, and meeting places all over the country.
-- I was an emcee and also gave talks for TENK Tech Camp in Trondheim in 2020, 2021, and 2023! TENK Tech Camp is a technology camp for girls with several workshops aimed at showing them that technology can absolutely be for them. I tried to keep the attention of 13- to 15-year-olds, which was not always the easiest job.
-- I took part in a series called "Jævli flink S2". You could compare it to a reality series about girls studying technology.
+    - I joined the nationwide Jenter og Teknologi tour, where I, together with other role models, gave talks for girls in middle school. We visited more than 20 schools, cultural centers, cinemas, and meeting places all over the country. You can read more [here](https://www.nho.no/tema/kompetanse-og-utdanning/artikler/jenter-og-teknologi/) and [here](https://jenterogteknologi.com/).
+    - I was an emcee and also gave talks for TENK Tech Camp in Trondheim in 2020, 2021, and 2023! TENK Tech Camp is a technology camp for girls with several workshops aimed at showing them that technology can absolutely be for them. I tried to keep the attention of 13- to 15-year-olds, which was not always the easiest job. You can read more about the camp [here](https://tenknorge.com/tenk-tech-camp).
+    - I took part in a series called "Jævli flink S2". You could compare it to a reality series about girls studying technology. The videos are [here](https://www.youtube.com/playlist?list=PL4nvO1Mxs-KV8LFXLHPzeTDeMEvQBDS4o).
 - Finally, I had my own TikTok profile where I tried to reach "the youth" (haha, that made me sound ancient). I mostly posted relatable content from my everyday life. It is a little hard to describe exactly what I did in grown-up language, so I will just point to [my account](https://www.tiktok.com/@tira.py) instead.`,
       },
     },
@@ -181,10 +181,10 @@ Og jeg holder faktisk fortsatt på med løping!!`,
       women_in_tech: {
         text: `Gjennom studietiden min engasjerte jeg meg veldig mye for å få flere jenter og kvinner til å velge teknologirelaterte studier.
 
-- Jeg var med på Norges-turneen til Jenter og Teknologi, hvor jeg sammen med andre rollemodeller holdt foredrag for jenter på ungdomsskolen. Vi var på mer enn 20 skoler, kulturhus, kinosaler og møteplasser rundt om i hele landet.
-- Jeg har vært konferansier og bidratt med innlegg på TENK Tech Camp i Trondheim i 2020, 2021 og 2023! TENK Tech Camp er en teknologicamp for jenter med flere workshops som har som mål å få jentene til å tenke at teknologi også er noe for dem. Jeg prøvde å holde på oppmerksomheten til jenter mellom 13 og 15 år, og det var ikke alltid like enkelt.
-- Jeg var med i en serie som heter «Jævli flink S2». Den kan kanskje sammenlignes med en realityserie om jenter som studerer teknologi.
-- Til slutt hadde jeg en egen TikTok-profil hvor jeg prøvde å nå ut til «ungdommen» (haha, det får meg til å høres gammel ut). Jeg postet hovedsakelig relaterbart innhold fra hverdagen min. Det er litt vanskelig å beskrive helt presist hva jeg gjorde på voksenspråk, så jeg får heller vise til [brukeren min](https://www.tiktok.com/@tira.py).`,
+      - Jeg var med på Norges-turneen til Jenter og Teknologi, hvor jeg sammen med andre rollemodeller holdt foredrag for jenter på ungdomsskolen. Vi var på mer enn 20 skoler, kulturhus, kinosaler og møteplasser rundt om i hele landet. Du kan lese mer [her](https://www.nho.no/tema/kompetanse-og-utdanning/artikler/jenter-og-teknologi/) og [her](https://jenterogteknologi.com/).
+      - Jeg har vært konferansier og bidratt med innlegg på TENK Tech Camp i Trondheim i 2020, 2021 og 2023! TENK Tech Camp er en teknologicamp for jenter med flere workshops som har som mål å få jentene til å tenke at teknologi også er noe for dem. Jeg prøvde å holde på oppmerksomheten til jenter mellom 13 og 15 år, og det var ikke alltid like enkelt. Du kan lese mer om campen [her](https://tenknorge.com/tenk-tech-camp).
+      - Jeg var med i en serie som heter «Jævli flink S2». Den kan kanskje sammenlignes med en realityserie om jenter som studerer teknologi. Youtube-videoene finner du [her](https://www.youtube.com/playlist?list=PL4nvO1Mxs-KV8LFXLHPzeTDeMEvQBDS4o).
+      - Til slutt hadde jeg en egen TikTok-profil hvor jeg prøvde å nå ut til «ungdommen» (haha, det får meg til å høres gammel ut). Jeg postet hovedsakelig relaterbart innhold fra hverdagen min. Det er litt vanskelig å beskrive helt presist hva jeg gjorde på voksenspråk, så jeg får heller vise til [Tiktok-brukeren min](https://www.tiktok.com/@tira.py).`,
       },
     },
     aboutMe: {

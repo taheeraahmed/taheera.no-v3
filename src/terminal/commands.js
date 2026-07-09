@@ -90,48 +90,15 @@ export const runCommand = ({
     inputRef.current?.blur()
   }
 
-  const runCatsCommand = () => {
-    const action = args[0]?.toLowerCase()
-
-    if (!action) {
-      if (isCatPartyActive) {
-        deactivateCatParty()
-        appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsDeactivated)
-        return
-      }
-
-      activateCatParty()
-      appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsActivated)
-      return
-    }
-
-    if (action === 'activate') {
-      if (isCatPartyActive) {
-        appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsAlreadyActive)
-        return
-      }
-
-      activateCatParty()
-      appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsActivated)
-      return
-    }
-
-    if (action === 'deactivate') {
-      if (!isCatPartyActive) {
-        appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsAlreadyInactive)
-        return
-      }
-
+  const toggleCats = () => {
+    if (isCatPartyActive) {
       deactivateCatParty()
       appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsDeactivated)
       return
     }
 
-    appendErrorEntry(
-      appendEntries,
-      baseEntry,
-      `${terminalStrings.catsUnknownAction(action)}\n${terminalStrings.catsUsage}`,
-    )
+    activateCatParty()
+    appendOutputEntry(appendEntries, baseEntry, terminalStrings.catsActivated)
   }
 
   const commandHandlers = {
@@ -200,7 +167,7 @@ export const runCommand = ({
     },
     cat: () => {
       if (!args[0]) {
-        appendErrorEntry(appendEntries, baseEntry, terminalStrings.catMissingOperand)
+        toggleCats()
         return
       }
 
@@ -214,7 +181,7 @@ export const runCommand = ({
       const node = findNode(terminalTree, targetPath)
 
       if (!node) {
-        appendErrorEntry(appendEntries, baseEntry, terminalStrings.catNoSuchFile(args[0]))
+        toggleCats()
         return
       }
 
@@ -263,7 +230,6 @@ export const runCommand = ({
       openCvDialog()
       appendOutputEntry(appendEntries, baseEntry, terminalStrings.openingCv)
     },
-    cats: runCatsCommand,
     lang: runLanguageCommand,
     language: runLanguageCommand,
     './card.sh': () => {

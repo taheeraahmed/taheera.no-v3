@@ -9,7 +9,6 @@ export const commandNames = [
   'cat',
   'open',
   'clear',
-  'cats',
   'bash',
   './card.sh',
   'lang',

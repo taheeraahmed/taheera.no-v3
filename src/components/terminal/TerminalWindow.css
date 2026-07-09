@@ -93,8 +93,14 @@
   max-height: 9em;
   line-height: 1.5;
   resize: none;
-  overflow-y: auto;
+  overflow: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   white-space: pre-wrap;
+}
+
+.command-form textarea::-webkit-scrollbar {
+  display: none;
 }
 
 .command-form textarea:focus {

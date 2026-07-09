@@ -73,21 +73,34 @@ And I am actually still running!!`,
     },
     aboutMe: {
       running: {
-        text: "I hated running in 2024, but I was group-pressured into signing up for a half marathon (it was in Italy, so I thought why not?). I finished it, but used SO much time, it was humbling. This is what has fueled my running motivation :) I've ran three half-marathons since, and I'm still running. Hopefully I will manage to run a half-marathon in under two hours? We will see.",
+        text: `I started running because I realized just how bad my cardio was after getting peer-pressured into running a half marathon. And I used 2 hours and 38 minutes, EVEN THOUGH my watch told me I would finish in 2 hours and 16 minutes. The disappointment was huge... But my first half marathon was also a revelation. I really needed cardio. I had done barely any endurance training before 2024...
+
+ANYWAY, now I run three times a week (one easy run, one interval or tempo session, and one long run) to try to improve my cardio. Maybe a full marathon would be fun once I get my 10K and half-marathon times down?? We will see!! :D`,
         imageAlt: 'Taheera finishing her first half-marathon outdoors',
       },
       knitting: {
-        text: 'I started knitting during the pandemic, there was so little to do... Now I love knitting, and I have knitted many sweaters, hehe sweaters are my favorite thing to knit!!',
+        text: `This really started as a pandemic hobby because I wanted a new sweater. My first sweater was SO ugly haha, it is honestly wild that I actually kept knitting after that. Maybe I saw the potential? Maybe I just saw too many pretty sweater patterns I absolutely "had" to own.
+
+I have knitted quite a few sweaters, and a lot of mittens too, even though the pair I gave my dad had a left mitten that was MUCH longer than the right one. Knitting is hard, but fun!!`,
         imageAlt: 'Taheera knitting a bucket hat',
       },
       weightlifting: {
-        text: 'Strength training has been part of my routine since high school, I still remember how scary it was entering the gym the first few times. My PR in squats is 115kg (and I weighed 60kg at the time!!)',
+        text: `I have been strength training since high school, and it is one thing I always come back to. I love the feeling it gives me and I like feeling strong!! Even though for the last two years I have mostly done lifting to focus on injury prevention for running...
+
+Back in the day I managed a 115 kg squat and a 60 kg bench press, which is kind of wild because I weighed around 60 kg at the time. I am also a short person, I am 158 cm "tall".`,
         imageAlt: 'Taheera at the gym',
       },
       reading: {
-        text: 'Okei I have to admit, yes, I do like reading, but if I do it often?? Or regularly?? I tend to read more in the summer though. I also like to listen to NRK Leseklubben podcast WHILE I read!! this gives me a lot of motivation for finishing my book :D',
+        text: `I think I mostly added this so it looks like I read. Or, I do read, but it really comes in waves and depends on whether I find a book I like. I definitely read the most in summer.
+
+I love, or at least the idea of, lying in the park with a blanket and enjoying the sun while doing something other than scrolling on TikTok... haha that is probably where a lot of my reading motivation comes from. I want to spend less time on my phone!`,
         imageAlt: 'Taheera reading',
       },
+        in_general: {
+          text: `I am the kind of person who stays stubborn when things get tough, whether that means difficult bugs and features or a bad half-marathon time. I believe that with hard work and dedication, I can solve all the problems I run into. As long as I have good structure around me and people who are excited to give me tips on where to find information, whether it is about running or squashing bugs.
+
+  I am also a very social person who likes being around other people and helping them achieve what they want. I feel like that has to be mentioned mostly because of the stereotype about people who studied computer science at NTNU.`,
+        },
     },
     welcomeLines: [
       `
@@ -176,21 +189,34 @@ Og jeg holder faktisk fortsatt på med løping!!`,
     },
     aboutMe: {
       running: {
-        text: 'Jeg hatet løping i 2024, men ble gruppepresset til å melde meg på et halvmaraton (det var i Italia, så jeg tenkte hvorfor ikke?). Jeg fullførte, men brukte VELDIG lang tid.... Det er egentlig dette som har vært hovedgrunnen til at jeg har fortsatt: vil bare ha bedre kondis :,) Siden Italia har jeg løpt tre halvmaraton. Jeg håper jeg klarer å løpe på under 2 timer en dag :)',
+        text: `Jeg begynte å løpe fordi jeg innså hvor dårlig kondis jeg hadde etter jeg ble gruppepresset til å løpe et halvmaraton. Og jeg brukte 2 timer og 38 minutter, TILTROSS for at klokken min sa at jeg kom til å bruke 2 timer og 16 minutter. Skuffelsen var stor.. Men det første halvmaratonet mitt var også en åpenbaring. Jeg trengte kondis. Hadde trent minimalt med kondisjonstrening før 2024...
+
+UANSETT, nå løper jeg tre ganger i uka (en rolig, en intervall/tempo og en langtur) for å prøve å få bedre kondis. Kanskje det hadde vært kult med et helmaraton når jeg har fått ned tidene mine på 10K og halvmaraton?? Vi får se!! :D`,
         imageAlt: 'Taheera i mål på sitt første halvmaraton',
       },
       knitting: {
-        text: 'Jeg begynte å strikke under pandemien, det var så lite å finne på... Nå elsker jeg strikking, og har strikket mange gensere. Hehe, gensere er favoritten min å strikke!!',
+        text: `Dette begynte vel egentlig mest som en corona-hobby fordi jeg ville ha ny genser. Den første genseren min ble SÅÅ stygg haha, helt sykt at jeg faktisk fortsatte med strikking etter det. Kanskje jeg sa potensialet? Kanskje jeg bare sa mange fine oppskrifter på gensere jeg bare "måtte" ha.
+
+Jeg har strikket en god del gensere, og mange par votter også, selv om det ene paret jeg ga til pappa hadde en venstre vott som var MYE lenger enn høyre. Strikking er vanskelig, men gøy!!`,
         imageAlt: 'Taheera strikker en bucket hat',
       },
       weightlifting: {
-        text: 'Jeg har holdt på med styrketrening siden videregående. Jeg husker fortsatt hvor skummelt det var å gå inn på treningssenteret de første gangene. PR i knebøy er 115kg (og jeg veide 60kg da!!).',
+        text: `Har holdt på med styrketrening siden videregående, og det er en ting jeg alltid kommer tilbake til. Elsker følelsen det gir meg og liker å føle meg sterk!! Selv om jeg de siste to årene har holdt på med styrke mest for å ha fokus på skadeforebygging for løping...
+
+Back in the days tok jeg 115 kg i knebøy og 60 kg i benk, noe som er vilt fordi jeg veide rundt 60 kg på den tiden. Jeg er også et lavt menneske, 158 cm "høy".`,
         imageAlt: 'Taheera på treningssenteret',
       },
       reading: {
-        text: 'Okei, så jeg liker å lese, ja, men om jeg gjør det ofte?? eller regelmessig?? Jeg leser nok mest om sommeren. Jeg liker også å høre på NRK Leseklubben-podkasten MENS jeg leser!! Det gjør at jeg faktisk fullfører bøkene jeg starter på hehe :D',
+        text: `Jeg føler jeg la til dette mest for at det skal virke som om jeg leser. Eller, jeg leser, men det går veldig i bolger og kommer an på om jeg finner en bok jeg liker. Leser definitivt mest på sommeren.
+
+Elsker, eller i hvert fall tanken på, å legge meg ned i parken med et pledd og nyte sola mens jeg kan gjøre noe annet enn å scrolle på TikTok... haha det er vel der lesemotivasjonen min kommer fra. Jeg vil bruke mindre tid på mobilen!`,
         imageAlt: 'Taheera leser',
       },
+        in_general: {
+          text: `Jeg er en person som er sta i motvind, enten det gjelder vanskelige bugs og features eller en treg halvmaratontid. Jeg har troa på at jeg, med hardt arbeid og dedikasjon, kan løse alle problemene jeg støter på. Så lenge jeg har en god struktur rundt meg og folk som er gira på å gi meg tips om hvor jeg kan finne informasjon, enten det gjelder løping eller bug squashing.
+
+  Jeg er også en veldig sosial person som liker å være rundt mennesker og hjelpe andre med å få til det de vil. Jeg føler dette må nevnes mest på grunn av stereotypen om folk som gikk datateknologi på NTNU :,)`,
+        },
     },
     welcomeLines: [
       `

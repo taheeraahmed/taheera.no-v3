@@ -55,6 +55,67 @@ const renderTextWithMarkdownLinks = (text) => {
   return nodes.length ? nodes : text
 }
 
+const unorderedListPattern = /^\s*[-*]\s+(.+)$/
+const orderedListPattern = /^\s*\d+[.)]\s+(.+)$/
+
+const getListFromSection = (sectionText) => {
+  const lines = sectionText.split('\n').map((line) => line.trim()).filter(Boolean)
+
+  if (!lines.length) {
+    return null
+  }
+
+  const unorderedItems = lines
+    .map((line) => line.match(unorderedListPattern)?.[1] ?? null)
+    .filter(Boolean)
+
+  if (unorderedItems.length === lines.length) {
+    return { type: 'ul', items: unorderedItems }
+  }
+
+  const orderedItems = lines
+    .map((line) => line.match(orderedListPattern)?.[1] ?? null)
+    .filter(Boolean)
+
+  if (orderedItems.length === lines.length) {
+    return { type: 'ol', items: orderedItems }
+  }
+
+  return null
+}
+
+const renderStructuredText = (text, keyPrefix) => {
+  if (!text) {
+    return ''
+  }
+
+  const sections = text.split('\n\n').filter((section) => section.trim())
+
+  return sections.map((section, index) => {
+    const list = getListFromSection(section)
+
+    if (!list) {
+      return (
+        <p className="terminal-text-paragraph" key={`${keyPrefix}-paragraph-${index}`}>
+          {renderTextWithMarkdownLinks(section)}
+        </p>
+      )
+    }
+
+    const ListTag = list.type
+
+    return (
+      <ListTag className="terminal-text-list" key={`${keyPrefix}-list-${index}`}>
+        {list.items.map((item, itemIndex) => (
+          <li className="terminal-text-list-item" key={`${keyPrefix}-list-item-${index}-${itemIndex}`}>
+            {renderTextWithMarkdownLinks(item)}
+          </li>
+        ))}
+      </ListTag>
+    )
+  })
+}
+
 const getEntryImages = (entry) => {
   if (Array.isArray(entry.images) && entry.images.length > 0) {
     return entry.images
@@ -170,7 +231,7 @@ function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
           return (
             <div className="line output rich-output" key={`${entry.type}-${index}`}>
               <RichOutputMediaStack images={entryImages} imageAlt={entry.imageAlt} />
-              <p className="rich-output-text">{renderTextWithMarkdownLinks(entry.text)}</p>
+              <div className="rich-output-text terminal-text-content">{renderStructuredText(entry.text, `rich-output-${index}`)}</div>
             </div>
           )
         }
@@ -206,6 +267,14 @@ function TerminalHistory({ history, historyEndRef, onHintClick, children }) {
                 </>
               )}
             </p>
+          )
+        }
+
+        if (entry.type === 'output') {
+          return (
+            <div className="line output terminal-text-content" key={`${entry.type}-${index}`}>
+              {renderStructuredText(entry.text, `output-${index}`)}
+            </div>
           )
         }
 

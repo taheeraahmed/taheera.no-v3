@@ -227,7 +227,7 @@ const localizedContent = {
         'about running or squashing bugs.',
       ]),
       joinChunks([
-        '  I am also a very social person who likes being around other people and helping them ',
+        'I am also a very social person who likes being around other people and helping them ',
         'achieve what they want. I feel like that has to be mentioned mostly because of the ',
         'stereotype about people who studied computer science at NTNU.',
       ]),
@@ -476,7 +476,7 @@ const localizedContent = {
         'squashing.',
       ]),
       joinChunks([
-        '  Jeg er også en veldig sosial person som liker å være rundt mennesker og hjelpe andre med å ',
+        'Jeg er også en veldig sosial person som liker å være rundt mennesker og hjelpe andre med å ',
         'få til det de vil. Jeg føler dette må nevnes mest på grunn av stereotypen om folk som gikk ',
         'datateknologi på NTNU :,)',
       ]),

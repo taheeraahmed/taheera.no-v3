@@ -55,6 +55,7 @@ export const proudOfMedia = {
 // imageAlt is intentionally omitted here — it is translated in i18n.js
 export const aboutMeMedia = {
   running: fromDir('/about_me/running', 'running-1.JPG', 'running-2.JPG', 'running-3.JPG', 'running-4.JPG'),
+  in_general: fromDir('/about_me/general', 'general-1.jpg', 'general-2.jpg', 'general-3.JPEG', 'general-4.JPEG'),
   knitting: fromDir('/about_me/knitting', 'buckethat.jpg'),
   weightlifting: fromDir('/about_me/weightlifting', 'weightlifting-1.jpg', 'weightlifting-2.JPG', 'weightlifting-3.png'),
   reading: fromDir('/about_me/reading', 'lese.jpg'),

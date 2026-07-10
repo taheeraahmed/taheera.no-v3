@@ -141,7 +141,15 @@ function RichOutputMediaStack({ images, imageAlt }) {
 
   const renderLayers = [...visibleLayers].reverse()
 
-  const handleCycle = () => {
+  const handlePrevious = () => {
+    if (totalImages < 2) {
+      return
+    }
+
+    setActiveIndex((previousIndex) => (previousIndex - 1 + totalImages) % totalImages)
+  }
+
+  const handleNext = () => {
     if (totalImages < 2) {
       return
     }
@@ -149,14 +157,31 @@ function RichOutputMediaStack({ images, imageAlt }) {
     setActiveIndex((previousIndex) => (previousIndex + 1) % totalImages)
   }
 
-  const stackLabel = totalImages > 1 ? 'Click to cycle photos' : 'Photo preview'
+  const handleStackClick = (event) => {
+    if (totalImages < 2) {
+      return
+    }
+
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const clickOffsetX = event.clientX - bounds.left
+    const clickedLeftSide = clickOffsetX < bounds.width / 2
+
+    if (clickedLeftSide) {
+      handlePrevious()
+      return
+    }
+
+    handleNext()
+  }
+
+  const stackLabel = totalImages > 1 ? 'Click left side for previous photo or right side for next photo' : 'Photo preview'
 
   return (
     <div className="rich-output-media">
       <button
         type="button"
         className="rich-output-media-stack"
-        onClick={handleCycle}
+        onClick={handleStackClick}
         aria-label={stackLabel}
         title={stackLabel}
       >

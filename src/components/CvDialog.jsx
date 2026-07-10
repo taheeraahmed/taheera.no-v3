@@ -4,7 +4,7 @@ import TerminalWindow from './terminal/TerminalWindow'
 import useDraggableWindow from '../hooks/useDraggableWindow'
 import './CvDialog.css'
 
-function CvDialog({ isOpen, fileName, onClose, isActive, onActivate, ui }) {
+function CvDialog({ isOpen, fileName, previewFile, onClose, isActive, onActivate, ui }) {
   const dialogRef = useRef(null)
   const { offset, isDragging, handleDragStart, resetOffset } = useDraggableWindow({
     getBounds: () => {
@@ -39,6 +39,11 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate, ui }) {
     return null
   }
 
+  const sourceFile = previewFile || fileName
+  const frameSource = sourceFile.toLowerCase().endsWith('.pdf')
+    ? `/${sourceFile}#toolbar=1&navpanes=0`
+    : `/${sourceFile}`
+
   return (
     <div className="cv-dialog-layer" style={{ zIndex: isActive ? 70 : 20 }}>
       <TerminalWindow
@@ -68,7 +73,7 @@ function CvDialog({ isOpen, fileName, onClose, isActive, onActivate, ui }) {
           ) : null}
           <iframe
             className="cv-frame"
-            src={`/${fileName}#toolbar=1&navpanes=0`}
+            src={frameSource}
             title={ui?.cvFrameTitle ?? 'Taheera CV'}
             onPointerDown={activateDialog}
             onFocus={activateDialog}

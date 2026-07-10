@@ -27,3 +27,20 @@ Run lint:
 ```bash
 npm run lint
 ```
+
+## Export CV PDF
+
+Generate a PDF from the HTML CV template:
+
+```bash
+uv run --with playwright playwright install chromium
+npm run cv:pdf
+```
+
+This exports:
+
+- `public/cv/CV_taheera_ahmed.pdf`
+
+The script file is:
+
+- `scripts/export_cv_pdf.py`

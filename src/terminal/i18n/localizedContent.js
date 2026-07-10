@@ -7,7 +7,7 @@ const joinParagraphs = (paragraphs) => paragraphs.join('\n\n')
 const localizedContent = {
   en: {
     rootFiles: {
-      'CV_taheera_en.pdf': 'Open with: open CV_taheera_en.pdf',
+      [CV_FILE_NAME]: `Open with: open ${CV_FILE_NAME}`,
       'card.sh': 'Run: ./card.sh or bash card.sh',
     },
     contactCard: {
@@ -254,7 +254,7 @@ const localizedContent = {
   },
   no: {
     rootFiles: {
-      'CV_taheera_en.pdf': 'Åpne med: open CV_taheera_en.pdf',
+      [CV_FILE_NAME]: `Åpne med: open ${CV_FILE_NAME}`,
       'card.sh': 'Kjør: ./card.sh eller bash card.sh',
     },
     contactCard: {

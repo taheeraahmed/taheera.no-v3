@@ -1,4 +1,5 @@
-export const CV_FILE_NAME = 'CV_taheera_en.pdf'
+export const CV_FILE_NAME = 'CV_taheera_ahmed.pdf'
+export const CV_PREVIEW_FILE = 'cv/CV_taheera_ahmed.pdf'
 
 export const commandNames = [
   'help',

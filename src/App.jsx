@@ -3,7 +3,7 @@ import ContactCard from './components/ContactCard'
 import CatPartyLayer from './components/CatPartyLayer'
 import CvDialog from './components/CvDialog'
 import TerminalWindow from './components/terminal/TerminalWindow'
-import { CV_FILE_NAME } from './terminal/constants'
+import { CV_FILE_NAME, CV_PREVIEW_FILE } from './terminal/constants'
 import { formatPrompt, formatSuggestionLabel, getTerminalListColumnWidth } from './terminal/formatters'
 import TerminalHistory from './components/terminal/TerminalHistory'
 import { useAppState } from './context/AppStateContext'
@@ -75,6 +75,7 @@ function App() {
       <CvDialog
         isOpen={isCvDialogOpen}
         fileName={CV_FILE_NAME}
+        previewFile={CV_PREVIEW_FILE}
         onClose={closeCvDialog}
         isActive={activeWindow === 'cv'}
         onActivate={setCvActive}

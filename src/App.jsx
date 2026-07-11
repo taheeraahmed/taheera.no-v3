@@ -7,6 +7,7 @@ import { CV_FILE_NAME, CV_PREVIEW_FILE } from './terminal/constants'
 import { formatPrompt, formatSuggestionLabel, getTerminalListColumnWidth } from './terminal/formatters'
 import TerminalHistory from './components/terminal/TerminalHistory'
 import { useAppState } from './context/AppStateContext'
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const {
@@ -70,6 +71,7 @@ function App() {
 
   return (
     <main className="portfolio-page">
+      <Analytics />
       {catPartyLayer}
 
       <CvDialog

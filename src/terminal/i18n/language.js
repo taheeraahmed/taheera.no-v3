@@ -1,4 +1,4 @@
-export const DEFAULT_LANGUAGE = 'en'
+export const DEFAULT_LANGUAGE = 'no'
 export const SUPPORTED_LANGUAGES = ['en', 'no']
 
 export const languageLabels = {
